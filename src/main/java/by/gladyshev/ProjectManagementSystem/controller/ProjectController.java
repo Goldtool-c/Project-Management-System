@@ -27,6 +27,6 @@ public class ProjectController {
     public String show(@PathVariable("id") int id, Model model)
     {
         model.addAttribute("projectModel", DAO.show(id));
-        return "projects/list";
+        return "projects/show";
     }
 }

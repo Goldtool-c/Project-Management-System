@@ -6,7 +6,7 @@
 </head>
 <body>
 <div th:each="projectModel:${projects}">
-    <a th:text="${projectModel.getName()}">VALUE</a>
+    <a th:href="@{projects/{id}(id=${projectModel.getId()})}" th:text="${projectModel.getName()}">VALUE</a>
 </div>
 </body>
 </html>
