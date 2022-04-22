@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -16,6 +17,8 @@ public class ProjectDAO {
     @Autowired
     public ProjectDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+        ID = jdbcTemplate.queryForObject("SELECT MAX(id) FROM project", Integer.class);
+        System.out.println(ID);
     }
     public ProjectModel show(int id)
     {
@@ -24,16 +27,16 @@ public class ProjectDAO {
     }
     public void delete(int id)
     {
-        jdbcTemplate.update("DELETE * FROM project WHERE id =?", id);
+        jdbcTemplate.update("DELETE FROM project WHERE id =?", id);
     }
     public void save(ProjectModel pm)
     {
         ID++;
-        jdbcTemplate.update("INSERT INTO person values(?, ?)", ID, pm.getName());
+        jdbcTemplate.update("INSERT INTO project values(?, ?)", ID, pm.getName());
     }
     public void update(ProjectModel pm)
     {
-        jdbcTemplate.update("UPDATE project SET id=?, name=?", pm.getId(), pm.getName());
+        jdbcTemplate.update("UPDATE project SET name=? WHERE id=?", pm.getName(), pm.getId());
     }
     public List<ProjectModel> index() {
         return jdbcTemplate.query("SELECT * FROM project", new ProjectMapper());

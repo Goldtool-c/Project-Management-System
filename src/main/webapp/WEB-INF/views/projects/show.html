@@ -7,6 +7,10 @@
 <body>
 <div th:text="${'id: '+projectModel.getId()}">VALUE</div>
 <div th:text="${'NAME: '+projectModel.getName()}">VALUE</div>
-</div>
+<a th:href="@{/projects/{id}/edit(id=${projectModel.getId()})}">Edit</a>
+<br>
+<form th:method="DELETE" th:action="@{/projects/{id}(id=${projectModel.getId()})}">
+    <input type="submit" value="Delete"/>
+</form>
 </body>
 </html>
