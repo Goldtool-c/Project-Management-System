@@ -19,7 +19,7 @@ public class ProjectDAO {
     }
     public ProjectModel show(int id)
     {
-        return jdbcTemplate.query("SELECT * FROM project WHERE id =?", new Object[]{1}, new ProjectMapper())
+        return jdbcTemplate.query("SELECT * FROM project WHERE id =?", new Object[]{id}, new ProjectMapper())
                 .stream().findAny().orElse(null);
     }
     public void delete(int id)
