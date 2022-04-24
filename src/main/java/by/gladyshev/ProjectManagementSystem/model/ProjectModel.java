@@ -2,14 +2,12 @@ package by.gladyshev.ProjectManagementSystem.model;
 
 import by.gladyshev.ProjectManagementSystem.entity.Task;
 import by.gladyshev.ProjectManagementSystem.entity.user.User;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-public class ProjectModel {
+public class ProjectModel implements Model {
     private int id;
     @NotEmpty(message = "Project name can not be empty")
     @Size(min = 1, max = 150, message = "Name length should be more than 1 and less than 150 symbols")
