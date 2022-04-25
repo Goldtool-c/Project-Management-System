@@ -26,6 +26,7 @@ public class SpringConfig implements WebMvcConfigurer {
     {
         this.context = context;
     }
+
     @Bean
     public SpringResourceTemplateResolver templateResolver()
     {

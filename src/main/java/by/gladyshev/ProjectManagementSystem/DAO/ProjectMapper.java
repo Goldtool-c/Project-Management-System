@@ -1,8 +1,8 @@
 package by.gladyshev.ProjectManagementSystem.DAO;
 
-import by.gladyshev.ProjectManagementSystem.entity.Project;
 import by.gladyshev.ProjectManagementSystem.model.Model;
 import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -14,6 +14,8 @@ public class ProjectMapper implements RowMapper<Model> {
         ProjectModel pm = new ProjectModel();
         pm.setId(resultSet.getInt("id"));
         pm.setName(resultSet.getString("name"));
+        //pm.setDevelopers(resultSet.getString(""));
+        pm.assignDeveloper(resultSet.getString("developers"));
         return pm;
     }
 }

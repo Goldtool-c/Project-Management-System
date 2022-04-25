@@ -1,7 +1,6 @@
 package by.gladyshev.ProjectManagementSystem.DAO;
 
 import by.gladyshev.ProjectManagementSystem.model.Model;
-import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -27,25 +26,29 @@ public class DAO {
     {
         jdbcTemplate.update("DELETE FROM "+table+" WHERE id =?", id);
     }
-    public void save(ProjectModel pm)
+    public void save(Model pm)
     {
         ID++;
         Field[] fields = pm.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            field.setAccessible(true);
-        }
+        Object[] values = new Object[fields.length];
         try {
-            jdbcTemplate.update("INSERT INTO "+table+" values(?, ?)", ID, fields[1].get(pm));//[1] bcs name is 2nd field
+            for (int i = 0; i < fields.length; i++) {
+                fields[i].setAccessible(true);
+                values[i] = fields[i].get(pm);
+            }
+            jdbcTemplate.update("INSERT INTO "+table+" values(?, ?)", ID, values);//[1] bcs name is 2nd field
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        //todo fix this crutch
     }
-    public void update(ProjectModel pm)
+    public void update(Model pm)
     {
         jdbcTemplate.update("UPDATE "+table+" SET name=? WHERE id=?", pm.getName(), pm.getId());
     }
     public List index() {
         return jdbcTemplate.query("SELECT * FROM "+table, rm);
+    }
+    public static int getID() {
+        return ID;
     }
 }

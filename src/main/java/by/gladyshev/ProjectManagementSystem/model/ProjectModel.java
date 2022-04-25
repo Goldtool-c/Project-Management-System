@@ -1,7 +1,8 @@
 package by.gladyshev.ProjectManagementSystem.model;
 
-import by.gladyshev.ProjectManagementSystem.entity.Task;
-import by.gladyshev.ProjectManagementSystem.entity.user.User;
+import by.gladyshev.ProjectManagementSystem.DAO.UserDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -12,15 +13,23 @@ public class ProjectModel implements Model {
     @NotEmpty(message = "Project name can not be empty")
     @Size(min = 1, max = 150, message = "Name length should be more than 1 and less than 150 symbols")
     private String name;
-    private List<Task> tasks;
-    private List<User> users;
+    private List<UserModel> developers;
+    //private List<Task> tasks;
+
 
     public ProjectModel(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public ProjectModel() { }
+    public ProjectModel(int id, String name, List<UserModel> developers) {
+        this.id = id;
+        this.name = name;
+        this.developers = developers;
+    }
+    public ProjectModel() {
+
+    }
 
 
     public int getId() {
@@ -39,19 +48,32 @@ public class ProjectModel implements Model {
         this.name = name;
     }
 
-    public List<Task> getTasks() {
+    /*public List<Task> getTasks() {
         return tasks;
     }
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }*/
+
+    public List<UserModel> getDevelopers() {
+        return developers;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public void setDevelopers(List<UserModel> developers) {
+        this.developers = developers;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    @Override
+    public String toString() {
+        return "ProjectModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
+    public void assignDeveloper(String name)
+    {
+
     }
 }
