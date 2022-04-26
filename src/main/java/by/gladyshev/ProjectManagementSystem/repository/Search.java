@@ -17,7 +17,6 @@ public class Search {
                 {
                     if(criteria.getValue().equals(field.get(temp)))
                     {
-                        System.out.println("we found "+temp);
                         return temp;
                     }
                 }

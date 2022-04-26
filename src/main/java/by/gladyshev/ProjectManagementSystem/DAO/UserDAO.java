@@ -15,7 +15,6 @@ public class UserDAO extends DAO {
     @Autowired
     public UserDAO(JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate);
-        System.out.println("userDao");
         table = "userDB";
         rm = new UserMapper();
         ID = jdbcTemplate.queryForObject("SELECT MAX(id) FROM "+table, Integer.class);

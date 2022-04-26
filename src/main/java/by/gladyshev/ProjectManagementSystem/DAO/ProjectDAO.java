@@ -16,7 +16,6 @@ public class ProjectDAO extends DAO{
         table = "project";
         rm = new ProjectMapper();
         ID = jdbcTemplate.queryForObject("SELECT MAX(id) FROM "+table, Integer.class);
-        System.out.println("projectDao");
         repository = ProjectRepository.INSTANCE;
         ProjectRepository.INSTANCE.setAll((List<Model>) this.index());
     }

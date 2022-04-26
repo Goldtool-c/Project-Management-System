@@ -1,8 +1,6 @@
 package by.gladyshev.ProjectManagementSystem.controller;
 
 import by.gladyshev.ProjectManagementSystem.DAO.UserDAO;
-import by.gladyshev.ProjectManagementSystem.entity.user.User;
-import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
 import by.gladyshev.ProjectManagementSystem.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
