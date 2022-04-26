@@ -15,7 +15,7 @@ public class Search {
                 field.setAccessible(true);
                 if(field.getName().equals(criteria.getProperty()))
                 {
-                    if(criteria.getValue().equals(field.get(temp).toString()))
+                    if(criteria.getValue().equals(field.get(temp)))
                     {
                         return temp;
                     }

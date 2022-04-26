@@ -2,7 +2,9 @@ package by.gladyshev.ProjectManagementSystem.DAO;
 
 import by.gladyshev.ProjectManagementSystem.model.Model;
 import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
+import by.gladyshev.ProjectManagementSystem.repository.Criteria;
 import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
+import by.gladyshev.ProjectManagementSystem.repository.Search;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,5 +22,11 @@ public class ProjectDAO extends DAO{
         rm = new ProjectMapper();
         ID = jdbcTemplate.queryForObject("SELECT MAX(id) FROM "+table, Integer.class);
         ProjectRepository.INSTANCE.setAll((List<Model>) this.index());
+        try {
+            System.out.println(Search.search(new Criteria("name", "gym"), ProjectRepository.INSTANCE));
+            System.out.println(Search.search(new Criteria("id", 11), ProjectRepository.INSTANCE));
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

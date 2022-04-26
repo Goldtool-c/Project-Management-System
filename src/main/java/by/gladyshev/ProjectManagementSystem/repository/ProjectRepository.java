@@ -1,12 +1,6 @@
 package by.gladyshev.ProjectManagementSystem.repository;
 
-import by.gladyshev.ProjectManagementSystem.entity.Project;
-import by.gladyshev.ProjectManagementSystem.entity.Task;
-import by.gladyshev.ProjectManagementSystem.entity.user.User;
 import by.gladyshev.ProjectManagementSystem.model.Model;
-import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
-import by.gladyshev.ProjectManagementSystem.model.TaskModel;
-import by.gladyshev.ProjectManagementSystem.model.UserModel;
 
 import java.util.ArrayList;
 import java.util.List;

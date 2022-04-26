@@ -2,8 +2,8 @@ package by.gladyshev.ProjectManagementSystem.repository;
 
 public class Criteria {
     private String property;
-    private String value;
-    public Criteria(String property, String value) {
+    private Object value;
+    public Criteria(String property, Object value) {
         this.property = property;
         this.value = value;
     }
@@ -12,7 +12,7 @@ public class Criteria {
         return property;
     }
 
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 }
