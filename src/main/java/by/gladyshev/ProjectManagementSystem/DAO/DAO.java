@@ -1,6 +1,7 @@
 package by.gladyshev.ProjectManagementSystem.DAO;
 
 import by.gladyshev.ProjectManagementSystem.model.Model;
+import by.gladyshev.ProjectManagementSystem.repository.Storage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,6 +14,7 @@ public class DAO {
     protected static int ID;
     protected String table;
     protected RowMapper<Model> rm;
+    protected Storage repository;
     @Autowired
     public DAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

@@ -1,16 +1,11 @@
 package by.gladyshev.ProjectManagementSystem.DAO;
 
 import by.gladyshev.ProjectManagementSystem.model.Model;
-import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
-import by.gladyshev.ProjectManagementSystem.repository.Criteria;
 import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
-import by.gladyshev.ProjectManagementSystem.repository.Search;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 @Component
@@ -21,12 +16,8 @@ public class ProjectDAO extends DAO{
         table = "project";
         rm = new ProjectMapper();
         ID = jdbcTemplate.queryForObject("SELECT MAX(id) FROM "+table, Integer.class);
+        System.out.println("projectDao");
+        repository = ProjectRepository.INSTANCE;
         ProjectRepository.INSTANCE.setAll((List<Model>) this.index());
-        try {
-            System.out.println(Search.search(new Criteria("name", "gym"), ProjectRepository.INSTANCE));
-            System.out.println(Search.search(new Criteria("id", 11), ProjectRepository.INSTANCE));
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
     }
 }
