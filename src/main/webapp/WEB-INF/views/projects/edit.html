@@ -10,6 +10,9 @@
     <input type="text" th:field="*{name}" id="name"/>
     <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
     <br/>
+    <br>
+    <a th:href="@{/projects/{id}/assign(id=${projectModel.getId()})}">Assign developer</a>
+    <br>
     <input type="submit" value="Update!"/>
 </form>
 </body>

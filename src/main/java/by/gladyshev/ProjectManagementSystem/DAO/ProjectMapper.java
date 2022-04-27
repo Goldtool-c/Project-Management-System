@@ -2,11 +2,14 @@ package by.gladyshev.ProjectManagementSystem.DAO;
 
 import by.gladyshev.ProjectManagementSystem.model.Model;
 import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
+import by.gladyshev.ProjectManagementSystem.model.UserModel;
 import by.gladyshev.ProjectManagementSystem.repository.UserRepository;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProjectMapper implements RowMapper<Model> {
     @Override
@@ -16,11 +19,32 @@ public class ProjectMapper implements RowMapper<Model> {
             pm.setId(resultSet.getInt("id"));
             pm.setName(resultSet.getString("name"));
             if(UserRepository.INSTANCE.Size()!=0) {
-                pm.assignDeveloper(resultSet.getString("developers"));
+                List<String> devs = parseName(resultSet.getString("developers"));
+                for (int j = 0; j < devs.size(); j++) {
+                    pm.assignDeveloper(devs.get(j));
+                }
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         return pm;
+    }
+    private List<String> parseName(String name)
+    {
+        List<String> devs = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        if(name!=null) {
+            for (int i = 0; i < name.length(); i++) {
+                if (name.charAt(i) != ',') {
+                    sb.append(name.charAt(i));
+                } else {
+                    System.out.println(sb.toString());
+                    devs.add(sb.toString());
+                    sb = new StringBuilder();
+                }
+            }
+            devs.add(sb.toString());
+        }
+        return devs;
     }
 }

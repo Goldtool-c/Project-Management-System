@@ -11,7 +11,7 @@ import java.util.List;
 
 public class DAO {
     protected final JdbcTemplate jdbcTemplate;
-    protected static int ID;
+    protected int ID;
     protected String table;
     protected RowMapper<Model> rm;
     protected Storage repository;
@@ -38,10 +38,14 @@ public class DAO {
                 fields[i].setAccessible(true);
                 values[i] = fields[i].get(pm);
             }
-            jdbcTemplate.update("INSERT INTO "+table+" values(?, ?)", ID, values);//[1] bcs name is 2nd field
+            jdbcTemplate.update("INSERT INTO "+table+" values(?, ?)", ID, values[1]);//[1] -- name
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+        System.out.println("log: saving "+pm+" to repository");
+        pm.setId(ID);
+        repository.add(pm);
+        System.out.println("success");
     }
     public void update(Model pm)
     {
@@ -50,7 +54,7 @@ public class DAO {
     public List index() {
         return jdbcTemplate.query("SELECT * FROM "+table, rm);
     }
-    public static int getID() {
+    public int getID() {
         return ID;
     }
 }

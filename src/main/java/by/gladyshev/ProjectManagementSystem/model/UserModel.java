@@ -3,6 +3,7 @@ package by.gladyshev.ProjectManagementSystem.model;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
 public class UserModel implements Model {
     private int id;
@@ -37,5 +38,19 @@ public class UserModel implements Model {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserModel userModel = (UserModel) o;
+        return id == userModel.id &&
+                Objects.equals(name, userModel.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
     }
 }

@@ -49,14 +49,6 @@ public class ProjectModel implements Model {
         this.name = name;
     }
 
-    /*public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }*/
-
     public List<UserModel> getDevelopers() {
         return developers;
     }
@@ -76,7 +68,22 @@ public class ProjectModel implements Model {
     public void assignDeveloper(String name) throws IllegalAccessException {
         if(name!=null) {
             UserModel dev = (UserModel) Search.search(new Criteria("name", name), UserRepository.INSTANCE);
-            developers.add(dev);
+            if(duplicateValid(dev)) {developers.add(dev);}
+            // else todo exception
         }//todo exception
+    }
+    public void assignDeveloper(UserModel um)
+    {
+        if(duplicateValid(um)) {developers.add(um);}
+    }
+    private boolean duplicateValid(UserModel um)
+    {
+        for (int i = 0; i < developers.size(); i++) {
+            if(developers.get(i).equals(um))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }
