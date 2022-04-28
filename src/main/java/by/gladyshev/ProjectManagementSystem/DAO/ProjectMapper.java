@@ -1,8 +1,10 @@
 package by.gladyshev.ProjectManagementSystem.DAO;
 
+import by.gladyshev.ProjectManagementSystem.entity.Project;
 import by.gladyshev.ProjectManagementSystem.model.Model;
 import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
 import by.gladyshev.ProjectManagementSystem.model.UserModel;
+import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
 import by.gladyshev.ProjectManagementSystem.repository.UserRepository;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -23,7 +25,9 @@ public class ProjectMapper implements RowMapper<Model> {
                 for (int j = 0; j < devs.size(); j++) {
                     pm.assignDeveloper(devs.get(j));
                 }
+                repositoryUpdate(pm);
             }
+
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -46,5 +50,15 @@ public class ProjectMapper implements RowMapper<Model> {
             devs.add(sb.toString());
         }
         return devs;
+    }
+    private void repositoryUpdate(Model pm) {
+        for (int i = 0; i < ProjectRepository.INSTANCE.Size(); i++) {
+            System.out.println(ProjectRepository.INSTANCE.get(i)+" equals "+
+                    pm+" is "+ ProjectRepository.INSTANCE.get(i).equals(pm));
+            if(ProjectRepository.INSTANCE.get(i).equals(pm))
+            {
+                ProjectRepository.INSTANCE.getAll().set(i, pm);
+            }
+        }
     }
 }

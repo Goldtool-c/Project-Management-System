@@ -9,6 +9,11 @@
 <div th:text="${'NAME: '+userModel.getName()}">VALUE</div>
 <a th:href="@{/users/{id}/edit(id=${userModel.getId()})}">Edit</a>
 <br>
+<div th:each="project : ${projects}">
+    <a th:href="@{/projects/{id}
+            (id=${project.getId()})}" th:text="${project.getName()}">VALUE</a>
+</div>
+
 <form th:method="DELETE" th:action="@{/users/{id}(id=${userModel.getId()})}">
     <input type="submit" value="Delete"/>
 </form>
