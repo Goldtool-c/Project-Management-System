@@ -24,7 +24,7 @@ public class UserController {
     public UserController(@Autowired UserDAO DAO,@Autowired ProjectDAO projectDAO) {
         this.DAO = DAO;
         projectDAO.index("id"); // without this devs wont be assigned due to order of creating beans
-        // projectDao creates first, so due to avoid nullPointerException was decided not to assign developers in
+        // projectDao creates first, so in order to avoid nullPointerException was decided not to assign developers in
         // projectDao constructor
     }
     @GetMapping
