@@ -21,7 +21,7 @@ public class UserController {
     @GetMapping
     public String index(Model model)
     {
-        model.addAttribute("users", DAO.index());
+        model.addAttribute("users", DAO.index("id"));
         return "users/index";
     }
     @GetMapping("/{id}")

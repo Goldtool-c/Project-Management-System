@@ -51,10 +51,33 @@ public class DAO {
     {
         jdbcTemplate.update("UPDATE "+table+" SET name=? WHERE id=?", pm.getName(), pm.getId());
     }
-    public List index() {
-        return jdbcTemplate.query("SELECT * FROM "+table, rm);
+    public List index(String sortType)
+    {
+        return jdbcTemplate.query("SELECT * FROM "+table+" order by "+parseSort(sortType), rm);
     }
     public int getID() {
         return ID;
+    }
+    protected String parseSort(String sortType)
+    {
+        switch (sortType)
+        {
+            case "reverse id":
+            {
+                sortType = "id desc";
+                break;
+            }
+            case "reverse name":
+            {
+                sortType = "name desc";
+                break;
+            }
+            default:
+            {
+                //todo exception/log
+                break;
+            }
+        }
+        return sortType;
     }
 }

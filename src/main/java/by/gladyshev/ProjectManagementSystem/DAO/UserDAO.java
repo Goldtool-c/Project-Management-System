@@ -19,6 +19,6 @@ public class UserDAO extends DAO {
         rm = new UserMapper();
         ID = jdbcTemplate.queryForObject("SELECT MAX(id) FROM "+table, Integer.class);
         repository = UserRepository.INSTANCE;
-        UserRepository.INSTANCE.setAll((List<Model>) this.index());
+        UserRepository.INSTANCE.setAll((List<Model>) this.index("id"));
     }
 }

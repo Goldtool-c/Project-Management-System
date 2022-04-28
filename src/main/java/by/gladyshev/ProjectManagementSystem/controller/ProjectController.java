@@ -16,21 +16,31 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Controller
 @RequestMapping("/projects")
 public class ProjectController {
     private ProjectDAO DAO;
     private UserDAO userDAO;
+    private List<String> sort = new ArrayList<>();
+    private String currentSort = "id";
     public ProjectController(@Autowired ProjectDAO dao,@Autowired UserDAO userDAO)
     {
         this.userDAO = userDAO;
         this.DAO = dao;
+        sort.add("id");
+        sort.add("reverse id");
+        sort.add("name");
+        sort.add("reverse name");
     }
     @GetMapping
     public String index(Model model)
     {
-        model.addAttribute("projects", DAO.index());
+        model.addAttribute("projects", DAO.index(currentSort));
+        model.addAttribute("sort", sort);
         return "projects/index";
     }
     @GetMapping("/{id}")
@@ -54,13 +64,13 @@ public class ProjectController {
     public String assign(@PathVariable("id")int id,Model pm, Model um)
     {
         pm.addAttribute("projectModel", DAO.show(id));
-        um.addAttribute("userModel", userDAO.index());
+        um.addAttribute("userModel", userDAO.index(currentSort));
         return "projects/assign";
     }
     @GetMapping("/assign/{uId}/{pId}")
     public String assign(@PathVariable("uId")int uId, @PathVariable("pId")int pId)
     {
-        UserModel um = null;
+        UserModel um;
         ProjectModel pm = null;
         try {
             pm = (ProjectModel) Search.search(new Criteria("id", pId), ProjectRepository.INSTANCE);
@@ -82,6 +92,7 @@ public class ProjectController {
         if (br.hasErrors()) {
             return "projects/edit";
         }
+
         DAO.update(pm);
         return "redirect:/projects";
     }
@@ -99,6 +110,13 @@ public class ProjectController {
             return "projects/new";
         }
         DAO.save(pm);
+        return "redirect:/projects";
+    }
+    @PostMapping("/sort")
+    public String sort(@ModelAttribute("sort") String sortType)
+    {
+        Collections.swap(sort, 0, sort.indexOf(sortType));
+        currentSort = sortType;
         return "redirect:/projects";
     }
 

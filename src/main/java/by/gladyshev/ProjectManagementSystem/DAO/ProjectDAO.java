@@ -27,18 +27,24 @@ public class ProjectDAO extends DAO{
             ID=0;
         }
         repository = ProjectRepository.INSTANCE;
-        ProjectRepository.INSTANCE.setAll((List<Model>) this.index());
+        ProjectRepository.INSTANCE.setAll((List<Model>) this.index("id"));
     }
     @Override
     public void update(Model pm)
     {
-        String users = parseName(((ProjectModel) pm).getDevelopers());
-        System.out.println(users);
-        jdbcTemplate.update("UPDATE "+table+" SET name=?, developers=? WHERE id=?", pm.getName(), users, pm.getId());
+        if (((ProjectModel) pm).getDevelopers().size()!=0) {
+            String users = parseName(((ProjectModel) pm).getDevelopers());
+            System.out.println(users);
+            jdbcTemplate.update("UPDATE " + table + " SET name=?, developers=? WHERE id=?", pm.getName(), users, pm.getId());
+        } else
+        {
+            jdbcTemplate.update("UPDATE " + table + " SET name=? WHERE id=?", pm.getName(), pm.getId());
+        }
     }
     private String parseName(List<UserModel> users)
     {
         StringBuilder sb = new StringBuilder();
+        System.out.println(users);
         sb.append(users.get(0).getName());
         for (int i = 1; i < users.size(); i++) {
             sb.append(",");

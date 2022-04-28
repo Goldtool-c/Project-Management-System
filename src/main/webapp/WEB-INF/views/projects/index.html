@@ -5,10 +5,23 @@
     <title>Title</title>
 </head>
 <body>
-<div th:each="projectModel:${projects}">
-    <a th:href="@{projects/{id}
-    (id=${projectModel.getId()})}" th:text="${projectModel.getName()}">VALUE</a>
-</div>
+<table border="1" width="600">
+    <tr><th>Project name</th> <th>Developers</th></tr>
+    <div th:each="projectModel:${projects}">
+        <tr><td><a th:href="@{projects/{id}
+            (id=${projectModel.getId()})}" th:text="${projectModel.getName()}">VALUE</a></td>
+            <td><a th:href="@{projects/{id}
+        (id=${projectModel.getId()})}" th:text="${projectModel.getDevelopers()}">VALUE</a></td></tr>
+    </div>
+</table>
+Sort by:
+<form th:action="@{/projects/sort}" th:object="${sort}" method="POST">
+    <select name="sort">
+        <option th:each="type : ${sort}" th:text="${type}">VALUE</option>
+    </select>
+    <input type="submit" value="Sort">
+</form>
+<br>
 <a href="/projects/new">Create new project</a>
 </body>
 </html>
