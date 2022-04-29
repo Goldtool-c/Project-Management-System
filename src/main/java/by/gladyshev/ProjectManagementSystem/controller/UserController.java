@@ -8,6 +8,8 @@ import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
 import by.gladyshev.ProjectManagementSystem.model.UserModel;
 import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
 import by.gladyshev.ProjectManagementSystem.repository.UserRepository;
+import by.gladyshev.ProjectManagementSystem.util.ActiveUser;
+import by.gladyshev.ProjectManagementSystem.validator.ShowAccessValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +25,7 @@ import java.util.List;
 public class UserController {
     private UserDAO DAO;
     private ProjectDAO projectDAO;
+    private ShowAccessValidator accessValid = ShowAccessValidator.getInstance();
     public UserController(@Autowired UserDAO DAO,@Autowired ProjectDAO projectDAO) {
         this.DAO = DAO;
         this.projectDAO = projectDAO;
@@ -33,38 +36,56 @@ public class UserController {
     @GetMapping
     public String index(Model model)
     {
-
-        model.addAttribute("users", DAO.index("id"));
-        return "users/index";
+        if(ActiveUser.getActiveUser().getRole().equals("admin")) {
+            model.addAttribute("users", DAO.index("id"));
+            return "users/index";
+        } else
+        {
+            return "redirect:/error/notEnoughRights";
+        }
     }
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model)
     {
         UserModel um = (UserModel) DAO.show(id);
-        List<ProjectModel> projectModels = new ArrayList<>();
-        List<UserModel> temp;
-        for (int i = 0; i < ProjectRepository.INSTANCE.Size(); i++) {
-            temp = ((ProjectModel)ProjectRepository.INSTANCE.get(i)).getDevelopers();
-            for (UserModel userModel : temp) {
-                if (um.equals(userModel)) {
-                    projectModels.add((ProjectModel) ProjectRepository.INSTANCE.get(i));
+        if(accessValid.showValid(um)) {
+            List<ProjectModel> projectModels = new ArrayList<>();
+            List<UserModel> temp;
+            for (int i = 0; i < ProjectRepository.INSTANCE.Size(); i++) {
+                temp = ((ProjectModel) ProjectRepository.INSTANCE.get(i)).getDevelopers();
+                for (UserModel userModel : temp) {
+                    if (um.equals(userModel)) {
+                        projectModels.add((ProjectModel) ProjectRepository.INSTANCE.get(i));
+                    }
                 }
             }
+            model.addAttribute("userModel", um);
+            model.addAttribute("projects", projectModels);
+            return "users/show";
+        } else
+        {
+            return "redirect:/error/notEnoughRights";
         }
-        model.addAttribute("userModel", um);
-        model.addAttribute("projects", projectModels);
-        return "users/show";
     }
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int id,Model model)
     {
-        model.addAttribute("userModel", DAO.show(id));
-        return "users/edit";
+        if(accessValid.showValid((UserModel) DAO.show(id))) {
+            model.addAttribute("userModel", DAO.show(id));
+            return "users/edit";
+        } else
+        {
+            return "redirect:/error/notEnoughRights";
+        }
     }
     @GetMapping("/new")
     public String newUser(@ModelAttribute("userModel") User um)
     {
-        return "users/new";
+        if(ActiveUser.getActiveUser().getRole().equals("admin")) {
+            return "users/new";
+        } else {
+            return "redirect:/error/notEnoughRights";
+        }
     }
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("userModel")@Valid UserModel um, BindingResult br,

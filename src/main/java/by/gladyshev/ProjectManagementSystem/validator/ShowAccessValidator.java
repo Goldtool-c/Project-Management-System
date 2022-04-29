@@ -6,17 +6,21 @@ import by.gladyshev.ProjectManagementSystem.util.ActiveUser;
 
 import java.util.List;
 
-public class ProjectAccessValidator {
-    private static ProjectAccessValidator instance;
-    private ProjectAccessValidator(){}
-    public static ProjectAccessValidator getInstance() {
+public class ShowAccessValidator {
+    private static ShowAccessValidator instance;
+    private ShowAccessValidator(){}
+    public static ShowAccessValidator getInstance() {
         if(instance == null){		//если объект еще не создан
-            instance = new ProjectAccessValidator();	//создать новый объект
+            instance = new ShowAccessValidator();	//создать новый объект
         }
         return instance;
     }
     public boolean showValid(ProjectModel pm)
     {
+        if(ActiveUser.getActiveUser().getRole().equals("admin"))
+        {
+            return true;
+        }
         List<UserModel> users = pm.getDevelopers();
         for (UserModel user : users) {
             if (user.equals(ActiveUser.getActiveUser())) {
@@ -24,5 +28,10 @@ public class ProjectAccessValidator {
             }
         }
         return false;
+    }
+    public boolean showValid(UserModel userModel)
+    {
+        return userModel.equals(ActiveUser.getActiveUser())
+                ||ActiveUser.getActiveUser().getRole().equals("admin");
     }
 }

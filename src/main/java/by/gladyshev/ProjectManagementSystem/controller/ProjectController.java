@@ -2,7 +2,6 @@ package by.gladyshev.ProjectManagementSystem.controller;
 
 import by.gladyshev.ProjectManagementSystem.DAO.ProjectDAO;
 import by.gladyshev.ProjectManagementSystem.DAO.UserDAO;
-import by.gladyshev.ProjectManagementSystem.entity.Project;
 import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
 import by.gladyshev.ProjectManagementSystem.model.UserModel;
 import by.gladyshev.ProjectManagementSystem.repository.Criteria;
@@ -10,7 +9,7 @@ import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
 import by.gladyshev.ProjectManagementSystem.repository.Search;
 import by.gladyshev.ProjectManagementSystem.repository.UserRepository;
 import by.gladyshev.ProjectManagementSystem.util.ActiveUser;
-import by.gladyshev.ProjectManagementSystem.validator.ProjectAccessValidator;
+import by.gladyshev.ProjectManagementSystem.validator.ShowAccessValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +28,7 @@ public class ProjectController {
     private UserDAO userDAO;
     private List<String> sort = new ArrayList<>();
     private String currentSort = "id";
-    private ProjectAccessValidator accessValid = ProjectAccessValidator.getInstance();
+    private ShowAccessValidator accessValid = ShowAccessValidator.getInstance();
     public ProjectController(@Autowired ProjectDAO dao,@Autowired UserDAO userDAO)
     {
         this.userDAO = userDAO;
