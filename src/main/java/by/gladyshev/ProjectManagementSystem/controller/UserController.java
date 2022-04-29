@@ -45,16 +45,13 @@ public class UserController {
         List<UserModel> temp;
         for (int i = 0; i < ProjectRepository.INSTANCE.Size(); i++) {
             temp = ((ProjectModel)ProjectRepository.INSTANCE.get(i)).getDevelopers();
-            System.out.println(ProjectRepository.INSTANCE.get(i));
             for (UserModel userModel : temp) {
-                System.out.println("is "+um+" equals "+ userModel);
                 if (um.equals(userModel)) {
                     projectModels.add((ProjectModel) ProjectRepository.INSTANCE.get(i));
                 }
             }
         }
         model.addAttribute("userModel", um);
-        System.out.println("projects for "+um+" are "+ projectModels);
         model.addAttribute("projects", projectModels);
         return "users/show";
     }
@@ -77,8 +74,6 @@ public class UserController {
             return "users/edit";
         }
         DAO.update(um);
-        System.out.println("ебучие юзеры");
-        System.out.println(UserRepository.INSTANCE.getAll());
         repositoryUpdate(um);
         return "redirect:/users";
     }

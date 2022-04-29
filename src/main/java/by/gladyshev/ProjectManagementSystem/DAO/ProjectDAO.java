@@ -33,10 +33,22 @@ public class ProjectDAO extends DAO{
     public void update(Model pm)
     {
         if (((ProjectModel) pm).getDevelopers().size()!=0) {
+            for (int i = 0; i < repository.Size(); i++) {
+                if(repository.get(i).getId()==pm.getId())
+                {
+                    repository.get(i).setName(pm.getName());
+                }
+            }
             String users = parseName(((ProjectModel) pm).getDevelopers());
             jdbcTemplate.update("UPDATE " + table + " SET name=?, developers=? WHERE id=?", pm.getName(), users, pm.getId());
         } else
         {
+            for (int i = 0; i < repository.Size(); i++) {
+                if(repository.get(i).getId()==pm.getId())
+                {
+                    repository.get(i).setName(pm.getName());
+                }
+            }
             jdbcTemplate.update("UPDATE " + table + " SET name=? WHERE id=?", pm.getName(), pm.getId());
         }
     }
