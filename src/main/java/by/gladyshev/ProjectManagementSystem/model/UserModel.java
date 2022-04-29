@@ -9,7 +9,7 @@ public class UserModel implements Model {
     private int id;
     @NotEmpty(message = "Name can not be empty")
     @Size(min = 1, max = 150, message = "Name length should be more than 1 and less than 150 symbols")
-    @Email
+    @Email(message = "name should be email format")
     private String name;
 
     public UserModel(int id, String name) {

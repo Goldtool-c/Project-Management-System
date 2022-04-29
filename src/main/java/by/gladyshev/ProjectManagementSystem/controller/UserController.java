@@ -2,10 +2,12 @@ package by.gladyshev.ProjectManagementSystem.controller;
 
 import by.gladyshev.ProjectManagementSystem.DAO.ProjectDAO;
 import by.gladyshev.ProjectManagementSystem.DAO.UserDAO;
+import by.gladyshev.ProjectManagementSystem.entity.Project;
 import by.gladyshev.ProjectManagementSystem.entity.user.User;
 import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
 import by.gladyshev.ProjectManagementSystem.model.UserModel;
 import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
+import by.gladyshev.ProjectManagementSystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +25,7 @@ public class UserController {
     private ProjectDAO projectDAO;
     public UserController(@Autowired UserDAO DAO,@Autowired ProjectDAO projectDAO) {
         this.DAO = DAO;
+        this.projectDAO = projectDAO;
         projectDAO.index("id"); // without this devs wont be assigned due to order of creating beans
         // projectDao creates first, so in order to avoid nullPointerException was decided not to assign developers in
         // projectDao constructor
@@ -74,6 +77,9 @@ public class UserController {
             return "users/edit";
         }
         DAO.update(um);
+        System.out.println("ебучие юзеры");
+        System.out.println(UserRepository.INSTANCE.getAll());
+        repositoryUpdate(um);
         return "redirect:/users";
     }
     @DeleteMapping("/{id}")
@@ -91,5 +97,27 @@ public class UserController {
         }
         DAO.save(um);
         return "redirect:/users";
+    }
+    private void repositoryUpdate(UserModel pm) {
+        for (int i = 0; i < UserRepository.INSTANCE.Size(); i++) {
+            System.out.println(UserRepository.INSTANCE.get(i)+" equals "+
+                    pm+" is "+ UserRepository.INSTANCE.get(i).equals(pm));
+            if(UserRepository.INSTANCE.get(i).getId()==pm.getId())
+            {
+                UserRepository.INSTANCE.get(i).setName(pm.getName());
+            }
+        }
+        for (int i = 0; i < ProjectRepository.INSTANCE.Size(); i++) {
+            for (int j = 0; j < ((ProjectModel)ProjectRepository.INSTANCE.get(i)).getDevelopers().size(); j++) {
+                if(pm.getId()==((ProjectModel)ProjectRepository.INSTANCE.get(i)).
+                        getDevelopers().get(j).getId())
+                {
+                    ((ProjectModel)ProjectRepository.INSTANCE.get(i)).getDevelopers().set(j, pm);
+                }
+            }//idk why, but when we edit username, it appears that user(name=x, id=y) in project.developers and
+            //user(name=x, id=y) in UserRepository are not same object, so it was decided to update users in
+            //projects manually
+            projectDAO.update(ProjectRepository.INSTANCE.get(i));
+        }
     }
 }

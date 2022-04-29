@@ -42,10 +42,8 @@ public class DAO {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        System.out.println("log: saving "+pm+" to repository");
         pm.setId(ID);
         repository.add(pm);
-        System.out.println("success");
     }
     public void update(Model pm)
     {

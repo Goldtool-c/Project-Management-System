@@ -42,7 +42,6 @@ public class ProjectMapper implements RowMapper<Model> {
                 if (name.charAt(i) != ',') {
                     sb.append(name.charAt(i));
                 } else {
-                    System.out.println(sb.toString());
                     devs.add(sb.toString());
                     sb = new StringBuilder();
                 }
@@ -53,8 +52,6 @@ public class ProjectMapper implements RowMapper<Model> {
     }
     private void repositoryUpdate(Model pm) {
         for (int i = 0; i < ProjectRepository.INSTANCE.Size(); i++) {
-            System.out.println(ProjectRepository.INSTANCE.get(i)+" equals "+
-                    pm+" is "+ ProjectRepository.INSTANCE.get(i).equals(pm));
             if(ProjectRepository.INSTANCE.get(i).equals(pm))
             {
                 ProjectRepository.INSTANCE.getAll().set(i, pm);

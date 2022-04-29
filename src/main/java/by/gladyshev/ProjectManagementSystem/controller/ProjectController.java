@@ -75,14 +75,11 @@ public class ProjectController {
         try {
             pm = (ProjectModel) Search.search(new Criteria("id", pId), ProjectRepository.INSTANCE);
             um = (UserModel) Search.search(new Criteria("id", uId), UserRepository.INSTANCE);
-            System.out.println("log: assigning "+um+" to "+pm);
             pm.assignDeveloper(um);
-            System.out.println("success");
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         DAO.update(pm);
-        System.out.println(DAO.show(pm.getId()));
         return "redirect:/projects/"+pm.getId();
     }
     @PatchMapping("/{id}")

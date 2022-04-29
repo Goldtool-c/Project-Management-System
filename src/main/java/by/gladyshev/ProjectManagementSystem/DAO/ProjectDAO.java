@@ -34,29 +34,15 @@ public class ProjectDAO extends DAO{
     {
         if (((ProjectModel) pm).getDevelopers().size()!=0) {
             String users = parseName(((ProjectModel) pm).getDevelopers());
-            System.out.println(users);
             jdbcTemplate.update("UPDATE " + table + " SET name=?, developers=? WHERE id=?", pm.getName(), users, pm.getId());
         } else
         {
             jdbcTemplate.update("UPDATE " + table + " SET name=? WHERE id=?", pm.getName(), pm.getId());
         }
     }
-
-    /*private void repositoryUpdate(Model pm) {
-        for (int i = 0; i < repository.Size(); i++) {
-            System.out.println(repository.get(i)+" equals "+
-                    pm+" is "+ repository.get(i).equals(pm));
-            if(repository.get(i).equals(pm))
-            {
-                repository.getAll().set(i, pm);
-            }
-        }
-    }*/
-
     private String parseName(List<UserModel> users)
     {
         StringBuilder sb = new StringBuilder();
-        System.out.println(users);
         sb.append(users.get(0).getName());
         for (int i = 1; i < users.size(); i++) {
             sb.append(",");
