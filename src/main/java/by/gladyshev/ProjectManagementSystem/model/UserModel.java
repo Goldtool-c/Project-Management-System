@@ -11,10 +11,22 @@ public class UserModel implements Model {
     @Size(min = 1, max = 150, message = "Name length should be more than 1 and less than 150 symbols")
     @Email(message = "name should be email format")
     private String name;
+    private int password;
 
     public UserModel(int id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public UserModel(String name, int password) {
+        this.name = name;
+        this.password = password;
+    }
+
+    public UserModel(int id, String name, int password) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
     }
 
     public UserModel(){}
@@ -35,6 +47,13 @@ public class UserModel implements Model {
         this.name = name;
     }
 
+    public int getPassword() {
+        return password;
+    }
+
+    public void setPassword(int password) {
+        this.password = password;
+    }
     @Override
     public String toString() {
         return this.name;

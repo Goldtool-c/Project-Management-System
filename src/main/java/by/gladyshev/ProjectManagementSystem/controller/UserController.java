@@ -3,7 +3,7 @@ package by.gladyshev.ProjectManagementSystem.controller;
 import by.gladyshev.ProjectManagementSystem.DAO.ProjectDAO;
 import by.gladyshev.ProjectManagementSystem.DAO.UserDAO;
 import by.gladyshev.ProjectManagementSystem.entity.Project;
-import by.gladyshev.ProjectManagementSystem.entity.user.User;
+import by.gladyshev.ProjectManagementSystem.entity.User;
 import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
 import by.gladyshev.ProjectManagementSystem.model.UserModel;
 import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
@@ -62,7 +62,7 @@ public class UserController {
         return "users/edit";
     }
     @GetMapping("/new")
-    public String newUser(@ModelAttribute("userModel") UserModel um)
+    public String newUser(@ModelAttribute("userModel") User um)
     {
         return "users/new";
     }
@@ -84,12 +84,15 @@ public class UserController {
         return "redirect:/users";
     }
     @PostMapping()
-    public String create(@ModelAttribute("userModel")@Valid UserModel um, BindingResult br)
+    public String create(@ModelAttribute("userModel")@Valid User user, BindingResult br)
     {
         if(br.hasErrors())
         {
             return "users/new";
         }
+        System.out.println(user);
+        UserModel um = new UserModel(user.getName(), user.getPassword().hashCode());
+        System.out.println(um+" "+um.getPassword());
         DAO.save(um);
         return "redirect:/users";
     }
