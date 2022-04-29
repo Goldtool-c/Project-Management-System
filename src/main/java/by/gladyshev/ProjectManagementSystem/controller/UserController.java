@@ -90,9 +90,7 @@ public class UserController {
         {
             return "users/new";
         }
-        System.out.println(user);
         UserModel um = new UserModel(user.getName(), user.getPassword().hashCode());
-        System.out.println(um+" "+um.getPassword());
         DAO.save(um);
         return "redirect:/users";
     }

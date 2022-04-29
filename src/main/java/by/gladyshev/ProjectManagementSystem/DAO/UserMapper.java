@@ -17,6 +17,7 @@ public class UserMapper implements RowMapper<Model> {
         um.setId(resultSet.getInt("id"));
         um.setName(resultSet.getString("name"));
         um.setPassword(resultSet.getInt("password"));
+        um.setRole(resultSet.getString("role"));
         if(UserRepository.INSTANCE.Size()!=0)
         {
             repositoryUpdate(um);

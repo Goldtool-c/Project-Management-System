@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1 align="center">You are not allowed to watch this page due</h1>
+<h1 align="center">to low access level<br>
+</h1>
+<h1 align="center">
+    <form th:method="GET" th:action="@{/users/{id}(id=${activeUser.getId()})}">
+        <input type="submit" value="Go home">
+    </form>
+</h1>
+</body>
+</html>

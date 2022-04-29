@@ -34,7 +34,7 @@ public class UserDAO extends DAO {
                 fields[i].setAccessible(true);
                 values[i] = fields[i].get(pm);
             }
-            jdbcTemplate.update("INSERT INTO "+table+" values(?, ?, ?)", ID, values[1], values[2]);//[1] -- name
+            jdbcTemplate.update("INSERT INTO "+table+" values(?, ?, ?, ?)", ID, values[1], values[2], "developer");//[1] -- name
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }

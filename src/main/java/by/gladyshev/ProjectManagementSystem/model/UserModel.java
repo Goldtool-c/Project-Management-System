@@ -12,7 +12,7 @@ public class UserModel implements Model {
     @Email(message = "name should be email format")
     private String name;
     private int password;
-
+    private String role;
     public UserModel(int id, String name) {
         this.id = id;
         this.name = name;
@@ -49,6 +49,14 @@ public class UserModel implements Model {
 
     public int getPassword() {
         return password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public void setPassword(int password) {
