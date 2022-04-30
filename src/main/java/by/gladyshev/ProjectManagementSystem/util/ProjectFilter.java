@@ -1,5 +1,6 @@
 package by.gladyshev.ProjectManagementSystem.util;
 
+import by.gladyshev.ProjectManagementSystem.entity.Project;
 import by.gladyshev.ProjectManagementSystem.model.MyModel;
 import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
 import by.gladyshev.ProjectManagementSystem.model.UserModel;
@@ -17,6 +18,7 @@ public class ProjectFilter {
     @NotEmpty(message = "it should not be empty")
     @Size(min = 1, message = "it should not be empty")
     private String userName;
+    private String projectName;
     public ProjectFilter() {
     }
 
@@ -27,10 +29,22 @@ public class ProjectFilter {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    public static List<MyModel> UserFilter(ProjectFilter filter)
-    {
 
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public static List<MyModel> filter(ProjectFilter filter)
+    {
         List<MyModel> res = new ArrayList<>();
+        if(filter.getUserName().length()==0)
+        {
+            res = ProjectRepository.INSTANCE.getAll();
+        }
         ProjectModel tempPM;
         UserModel goal = null;
         try {
@@ -50,7 +64,35 @@ public class ProjectFilter {
                 }
             }
         }
-        // res = anotherFilter(res, ...params)
+        System.out.println("Вызываем проектный фильтр");
+        res = projectNameFilter(res, filter);
+        System.out.println("Он кончил");
         return res;
+    }
+    private static List<MyModel> projectNameFilter(List<MyModel> toFilter, ProjectFilter filter)
+    {
+        List<MyModel> res = new ArrayList<>();
+        ProjectModel temp;
+        System.out.println("Залетаем в цикл");
+        System.out.println(toFilter.size());
+        for (MyModel myModel : toFilter) {
+            temp = (ProjectModel) myModel;
+            System.out.println("temp: "+temp.getName());
+            System.out.println("filter: "+filter.getProjectName());
+            System.out.println(temp.getName().contains(filter.getProjectName()));
+            System.out.println("______________");
+            if (temp.getName().contains(filter.getProjectName())) {
+                res.add(temp);
+            }
+        }
+        return res;
+    }
+
+    @Override
+    public String toString() {
+        return "ProjectFilter{" +
+                "userName='" + userName + '\'' +
+                ", projectName='" + projectName + '\'' +
+                '}';
     }
 }

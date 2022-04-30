@@ -205,11 +205,8 @@ public class ProjectController {
     @PostMapping("/filter")
     public String filter(@ModelAttribute("filter") ProjectFilter filter)
     {
-        if(filter.getUserName().length()==0)
-        {
-            return "redirect:/projects";
-        }
-        filtered = ProjectFilter.UserFilter(filter);
+        System.out.println(filter);
+        filtered = ProjectFilter.filter(filter);
         return "redirect:/projects/filter";
     }
     private int[] pagesNumber(List<MyModel> pm)

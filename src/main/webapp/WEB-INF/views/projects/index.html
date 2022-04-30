@@ -35,6 +35,8 @@ Filter by
 <form method="POST" th:object="${filter}" th:action="@{/projects/filter}">
     <label for="userName">Enter username</label>
     <input type="text" th:field="*{userName}" id="userName"/>
+    <label for="projectName">Enter projectName</label>
+    <input type="text" th:field="*{projectName}" id="projectName"/>
     <input type="submit" value="filter"/>
 </form>
 <a href="/projects/new">Create new project</a>
