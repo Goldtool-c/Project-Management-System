@@ -11,4 +11,5 @@ public interface Storage {
     List<Model> getAll();
     int Size();
     Model getByCriteria(Criteria criteria) throws IllegalAccessException;
+    void delete(int id);
 }

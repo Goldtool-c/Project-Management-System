@@ -17,6 +17,10 @@ public enum UserRepository implements Storage {
     public int Size() {
         return devs.size();
     }
+    @Override
+    public void delete(int id) {
+        devs.remove(id);
+    }
 
     @Override
     public Model getByCriteria(Criteria criteria) throws IllegalAccessException {

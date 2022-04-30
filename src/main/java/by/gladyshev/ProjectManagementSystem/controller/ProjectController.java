@@ -42,8 +42,30 @@ public class ProjectController {
     public String index(Model model)
     {
         if(ActiveUser.getActiveUser().getRole().equals("admin")) {
-            model.addAttribute("projects", DAO.index(currentSort));
+            List<ProjectModel> pm = DAO.index(currentSort);
+            List<ProjectModel> show = new ArrayList<>();
+            for (int i = 0; i < pm.size()&&i<10; i++) {
+                show.add(pm.get(i));
+            }
+            model.addAttribute("projects", show);
             model.addAttribute("sort", sort);
+            model.addAttribute("pages", pagesNumber());
+            return "projects/index";
+        }
+        return "redirect:/error/notEnoughRights";
+    }
+    @GetMapping("/page/{id}")
+    public String page(@PathVariable("id") int id, Model model)
+    {
+        if(ActiveUser.getActiveUser().getRole().equals("admin")) {
+            List<ProjectModel> pm = DAO.index(currentSort);
+            List<ProjectModel> show = new ArrayList<>();
+            for (int i = ((id-1)*10); i < pm.size()&&i<(id*10); i++) {
+                show.add(pm.get(i));
+            }
+            model.addAttribute("projects", show);
+            model.addAttribute("sort", sort);
+            model.addAttribute("pages", pagesNumber());
             return "projects/index";
         }
         return "redirect:/error/notEnoughRights";
@@ -144,5 +166,22 @@ public class ProjectController {
         currentSort = sortType;
         return "redirect:/projects";
     }
-
+    private int[] pagesNumber()
+    {
+        int n = ProjectRepository.INSTANCE.Size()/10+1;
+        int res[];
+        System.out.println("size%10="+ProjectRepository.INSTANCE.Size()%10);
+        System.out.println(ProjectRepository.INSTANCE.Size());
+        if(ProjectRepository.INSTANCE.Size()%10==0)
+        {
+            res = new int[n-1];
+        } else
+        {
+            res = new int[n];
+        }
+        for (int i = 0; i < res.length; i++) {
+            res[i]=i+1;
+        }
+        return res;
+    }
 }

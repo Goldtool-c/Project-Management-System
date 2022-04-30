@@ -24,6 +24,11 @@ public enum ProjectRepository implements Storage {
     }
 
     @Override
+    public void delete(int id) {
+        projects.remove(id);
+    }
+
+    @Override
     public void setAll(List<Model> projects) {
         this.projects = projects;
     }
@@ -37,4 +42,5 @@ public enum ProjectRepository implements Storage {
     public Model get(int id) {
         return projects.get(id);
     }
+
 }

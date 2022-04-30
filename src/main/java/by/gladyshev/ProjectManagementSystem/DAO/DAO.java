@@ -1,6 +1,7 @@
 package by.gladyshev.ProjectManagementSystem.DAO;
 
 import by.gladyshev.ProjectManagementSystem.model.Model;
+import by.gladyshev.ProjectManagementSystem.repository.Search;
 import by.gladyshev.ProjectManagementSystem.repository.Storage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,6 +27,15 @@ public class DAO {
     }
     public void delete(int id)
     {
+        Model temp;
+        for (int i = 0; i < repository.Size(); i++) {
+            temp = repository.get(i);
+            if(temp.getId()==id)
+            {
+                repository.delete(i);
+                break;
+            }
+        }
         jdbcTemplate.update("DELETE FROM "+table+" WHERE id =?", id);
     }
     public void save(Model pm)

@@ -17,7 +17,10 @@ public enum TaskRepository implements Storage {
     public int Size() {
         return tasks.size();
     }
+    @Override
+    public void delete(int id) {
 
+    }
     @Override
     public Model getByCriteria(Criteria criteria) throws IllegalAccessException {
        return Search.search(criteria, this);

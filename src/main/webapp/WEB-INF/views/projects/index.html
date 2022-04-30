@@ -3,17 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        ul.hr {
+            margin: 0; /* Обнуляем значение отступов */
+            padding: 4px; /* Значение полей */
+        }
+        ul.hr li {
+            display: inline-block; /* Отображать как строчный элемент */
+            margin-right: 5px; /* Отступ слева */
+            border: 1px solid #000; /* Рамка вокруг текста */
+            padding: 3px; /* Поля вокруг текста */
+        }
+    </style>
 </head>
 <body>
+
 <table border="1" width="600">
     <tr><th>Project name</th> <th>Developers</th></tr>
     <div th:each="projectModel:${projects}">
-        <tr><td><a th:href="@{projects/{id}
+        <tr><td><a th:href="@{/projects/{id}
             (id=${projectModel.getId()})}" th:text="${projectModel.getName()}">VALUE</a></td>
-            <td><a th:href="@{projects/{id}
+            <td><a th:href="@{/projects/{id}
         (id=${projectModel.getId()})}" th:text="${projectModel.getDevelopers()}">VALUE</a></td></tr>
     </div>
 </table>
+
+<nobr th:each="page:${pages}">
+    <a th:href="@{/projects/page/{id}(id=${page})}" th:text="${page} ">VALUE</a>
+</nobr>
 Sort by:
 <form th:action="@{/projects/sort}" th:object="${sort}" method="POST">
     <select name="sort">
