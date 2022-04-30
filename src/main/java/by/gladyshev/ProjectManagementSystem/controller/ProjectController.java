@@ -29,6 +29,7 @@ public class ProjectController {
     private List<String> sort = new ArrayList<>();
     private String currentSort = "id";
     private ShowAccessValidator accessValid = ShowAccessValidator.getInstance();
+    private int activePage = 1;
     public ProjectController(@Autowired ProjectDAO dao,@Autowired UserDAO userDAO)
     {
         this.userDAO = userDAO;
@@ -50,6 +51,7 @@ public class ProjectController {
             model.addAttribute("projects", show);
             model.addAttribute("sort", sort);
             model.addAttribute("pages", pagesNumber());
+            model.addAttribute("activePage", activePage);
             return "projects/index";
         }
         return "redirect:/error/notEnoughRights";
@@ -58,6 +60,7 @@ public class ProjectController {
     public String page(@PathVariable("id") int id, Model model)
     {
         if(ActiveUser.getActiveUser().getRole().equals("admin")) {
+            activePage=id;
             List<ProjectModel> pm = DAO.index(currentSort);
             List<ProjectModel> show = new ArrayList<>();
             for (int i = ((id-1)*10); i < pm.size()&&i<(id*10); i++) {
@@ -66,6 +69,7 @@ public class ProjectController {
             model.addAttribute("projects", show);
             model.addAttribute("sort", sort);
             model.addAttribute("pages", pagesNumber());
+            model.addAttribute("activePage", activePage);
             return "projects/index";
         }
         return "redirect:/error/notEnoughRights";

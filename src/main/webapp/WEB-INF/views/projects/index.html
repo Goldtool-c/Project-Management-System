@@ -27,10 +27,14 @@
         (id=${projectModel.getId()})}" th:text="${projectModel.getDevelopers()}">VALUE</a></td></tr>
     </div>
 </table>
-
+Page:
 <nobr th:each="page:${pages}">
-    <a th:href="@{/projects/page/{id}(id=${page})}" th:text="${page} ">VALUE</a>
+    <a th:href="@{/projects/page/{id}(id=${page})}" th:text="${page} "
+       th:if="${page==activePage} " style="color:brown">VALUE</a>
+    <a th:href="@{/projects/page/{id}(id=${page})}" th:text="${page} "
+       th:if="${page!=activePage}">VALUE</a>
 </nobr>
+<br>
 Sort by:
 <form th:action="@{/projects/sort}" th:object="${sort}" method="POST">
     <select name="sort">
