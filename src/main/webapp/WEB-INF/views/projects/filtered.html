@@ -2,10 +2,9 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Projects</title>
+    <title>Title</title>
 </head>
 <body>
-
 <table border="1" width="600">
     <tr><th>Project name</th> <th>Developers</th></tr>
     <div th:each="projectModel:${projects}">
@@ -17,26 +16,10 @@
 </table>
 Page:
 <nobr th:each="page:${pages}">
-    <a th:href="@{/projects/page/{id}(id=${page})}" th:text="${page} "
+    <a th:href="@{/projects/filter/page/{id}(id=${page})}" th:text="${page} "
        th:if="${page==activePage} " style="color:brown">VALUE</a>
-    <a th:href="@{/projects/page/{id}(id=${page})}" th:text="${page} "
+    <a th:href="@{/projects/filter/page/{id}(id=${page})}" th:text="${page} "
        th:if="${page!=activePage}">VALUE</a>
 </nobr>
-<br>
-Sort by:
-<form th:action="@{/projects/sort}" th:object="${sort}" method="POST">
-    <select name="sort">
-        <option th:each="type : ${sort}" th:text="${type}">VALUE</option>
-    </select>
-    <input type="submit" value="Sort">
-</form>
-<br>
-Filter by
-<form method="POST" th:object="${filter}" th:action="@{/projects/filter}">
-    <label for="userName">Enter username</label>
-    <input type="text" th:field="*{userName}" id="userName"/>
-    <input type="submit" value="filter"/>
-</form>
-<a href="/projects/new">Create new project</a>
 </body>
 </html>

@@ -1,9 +1,6 @@
 package by.gladyshev.ProjectManagementSystem.DAO;
 
-import by.gladyshev.ProjectManagementSystem.entity.user.User;
-import by.gladyshev.ProjectManagementSystem.model.Model;
-import by.gladyshev.ProjectManagementSystem.model.UserModel;
-import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
+import by.gladyshev.ProjectManagementSystem.model.MyModel;
 import by.gladyshev.ProjectManagementSystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,10 +18,10 @@ public class UserDAO extends DAO {
         rm = new UserMapper();
         ID = jdbcTemplate.queryForObject("SELECT MAX(id) FROM "+table, Integer.class);
         repository = UserRepository.INSTANCE;
-        UserRepository.INSTANCE.setAll((List<Model>) this.index("id"));
+        UserRepository.INSTANCE.setAll((List<MyModel>) this.index("id"));
     }
     @Override
-    public void save(Model pm)
+    public void save(MyModel pm)
     {
         ID++;
         Field[] fields = pm.getClass().getDeclaredFields();

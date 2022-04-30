@@ -1,15 +1,15 @@
 package by.gladyshev.ProjectManagementSystem.repository;
 
-import by.gladyshev.ProjectManagementSystem.model.Model;
+import by.gladyshev.ProjectManagementSystem.model.MyModel;
 
 import java.util.List;
 
 public interface Storage {
-    Model get(int id);
-    void add(Model model);
-    void setAll(List<Model> models);
-    List<Model> getAll();
+    MyModel get(int id);
+    void add(MyModel model);
+    void setAll(List<MyModel> models);
+    List<MyModel> getAll();
     int Size();
-    Model getByCriteria(Criteria criteria) throws IllegalAccessException;
+    MyModel getByCriteria(Criteria criteria) throws IllegalAccessException;
     void delete(int id);
 }

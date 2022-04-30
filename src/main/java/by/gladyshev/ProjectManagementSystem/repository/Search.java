@@ -1,6 +1,6 @@
 package by.gladyshev.ProjectManagementSystem.repository;
 
-import by.gladyshev.ProjectManagementSystem.model.Model;
+import by.gladyshev.ProjectManagementSystem.model.MyModel;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -8,8 +8,8 @@ import java.util.List;
 
 public class Search {
     private Search(){}
-    public static Model search(Criteria criteria, Storage repository) throws IllegalAccessException {
-        Model temp;
+    public static MyModel search(Criteria criteria, Storage repository) throws IllegalAccessException {
+        MyModel temp;
         for (int i = 0; i < repository.Size(); i++) {
             temp = repository.get(i);
             Field[] fields = temp.getClass().getDeclaredFields();
@@ -26,9 +26,9 @@ public class Search {
         }
         return null; //todo throw notFindException
     }
-    public static List<Model> searchList(Criteria criteria, Storage repository) throws IllegalAccessException {
-        Model temp;
-        List<Model> res = new ArrayList<>();
+    public static List<MyModel> searchList(Criteria criteria, Storage repository) throws IllegalAccessException {
+        MyModel temp;
+        List<MyModel> res = new ArrayList<>();
         for (int i = 0; i < repository.Size(); i++) {
             temp = repository.get(i);
             Field[] fields = temp.getClass().getDeclaredFields();

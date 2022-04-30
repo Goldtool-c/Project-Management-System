@@ -2,6 +2,7 @@ package by.gladyshev.ProjectManagementSystem.controller;
 
 import by.gladyshev.ProjectManagementSystem.DAO.ProjectDAO;
 import by.gladyshev.ProjectManagementSystem.DAO.UserDAO;
+import by.gladyshev.ProjectManagementSystem.model.MyModel;
 import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
 import by.gladyshev.ProjectManagementSystem.model.UserModel;
 import by.gladyshev.ProjectManagementSystem.repository.Criteria;
@@ -9,6 +10,7 @@ import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
 import by.gladyshev.ProjectManagementSystem.repository.Search;
 import by.gladyshev.ProjectManagementSystem.repository.UserRepository;
 import by.gladyshev.ProjectManagementSystem.util.ActiveUser;
+import by.gladyshev.ProjectManagementSystem.util.ProjectFilter;
 import by.gladyshev.ProjectManagementSystem.validator.ShowAccessValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +31,7 @@ public class ProjectController {
     private List<String> sort = new ArrayList<>();
     private String currentSort = "id";
     private ShowAccessValidator accessValid = ShowAccessValidator.getInstance();
+    private List<MyModel> filtered = new ArrayList<>();
     private int activePage = 1;
     public ProjectController(@Autowired ProjectDAO dao,@Autowired UserDAO userDAO)
     {
@@ -50,8 +53,10 @@ public class ProjectController {
             }
             model.addAttribute("projects", show);
             model.addAttribute("sort", sort);
-            model.addAttribute("pages", pagesNumber());
+            model.addAttribute("pages", pagesNumber(ProjectRepository.INSTANCE.getAll()));
             model.addAttribute("activePage", activePage);
+            model.addAttribute("filter", new ProjectFilter());
+            model.addAttribute("users", UserRepository.INSTANCE.getAll());
             return "projects/index";
         }
         return "redirect:/error/notEnoughRights";
@@ -68,8 +73,10 @@ public class ProjectController {
             }
             model.addAttribute("projects", show);
             model.addAttribute("sort", sort);
-            model.addAttribute("pages", pagesNumber());
+            model.addAttribute("pages", pagesNumber(ProjectRepository.INSTANCE.getAll()));
             model.addAttribute("activePage", activePage);
+            model.addAttribute("filter", new ProjectFilter());
+            model.addAttribute("users", UserRepository.INSTANCE.getAll());
             return "projects/index";
         }
         return "redirect:/error/notEnoughRights";
@@ -136,6 +143,31 @@ public class ProjectController {
             return "redirect:/error/notEnoughRights";
         }
     }
+    @GetMapping("/filter")
+    public String filter(Model model)
+    {
+        activePage = 1;
+        model.addAttribute("projects", filtered);
+        model.addAttribute("pages", pagesNumber(filtered));
+        return "projects/filtered";
+    }
+    @GetMapping("/filter/page/{id}")
+    public String pageFilter(@PathVariable("id") int id, Model model)
+    {
+        if(ActiveUser.getActiveUser().getRole().equals("admin")) {
+            activePage=id;
+            List<MyModel> pm = filtered;
+            List<MyModel> show = new ArrayList<>();
+            for (int i = ((id-1)*10); i < pm.size()&&i<(id*10); i++) {
+                show.add(pm.get(i));
+            }
+            model.addAttribute("projects", show);
+            model.addAttribute("pages", pagesNumber(pm));
+            model.addAttribute("activePage", activePage);
+            return "projects/filtered";
+        }
+        return "redirect:/error/notEnoughRights";
+    }
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("projectModel")@Valid ProjectModel pm, BindingResult br,
                          @PathVariable("id")int id)
@@ -170,13 +202,23 @@ public class ProjectController {
         currentSort = sortType;
         return "redirect:/projects";
     }
-    private int[] pagesNumber()
+    @PostMapping("/filter")
+    public String filter(@ModelAttribute("filter") ProjectFilter filter)
     {
-        int n = ProjectRepository.INSTANCE.Size()/10+1;
+        if(filter.getUserName().length()==0)
+        {
+            return "redirect:/projects";
+        }
+        filtered = ProjectFilter.UserFilter(filter);
+        return "redirect:/projects/filter";
+    }
+    private int[] pagesNumber(List<MyModel> pm)
+    {
+        int n = pm.size()/10+1;
         int res[];
-        System.out.println("size%10="+ProjectRepository.INSTANCE.Size()%10);
-        System.out.println(ProjectRepository.INSTANCE.Size());
-        if(ProjectRepository.INSTANCE.Size()%10==0)
+        System.out.println("size%10="+pm.size()%10);
+        System.out.println(pm.size());
+        if(pm.size()%10==0)
         {
             res = new int[n-1];
         } else

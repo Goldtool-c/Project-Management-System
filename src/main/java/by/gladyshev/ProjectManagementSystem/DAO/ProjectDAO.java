@@ -1,7 +1,6 @@
 package by.gladyshev.ProjectManagementSystem.DAO;
 
-import by.gladyshev.ProjectManagementSystem.entity.Project;
-import by.gladyshev.ProjectManagementSystem.model.Model;
+import by.gladyshev.ProjectManagementSystem.model.MyModel;
 import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
 import by.gladyshev.ProjectManagementSystem.model.UserModel;
 import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -27,10 +25,10 @@ public class ProjectDAO extends DAO{
             ID=0;
         }
         repository = ProjectRepository.INSTANCE;
-        ProjectRepository.INSTANCE.setAll((List<Model>) this.index("id"));
+        ProjectRepository.INSTANCE.setAll((List<MyModel>) this.index("id"));
     }
     @Override
-    public void update(Model pm)
+    public void update(MyModel pm)
     {
         if (((ProjectModel) pm).getDevelopers().size()!=0) {
             for (int i = 0; i < repository.Size(); i++) {

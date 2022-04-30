@@ -5,7 +5,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Objects;
 
-public class UserModel implements Model {
+public class UserModel implements MyModel {
     private int id;
     @NotEmpty(message = "Name can not be empty")
     @Size(min = 1, max = 150, message = "Name length should be more than 1 and less than 150 symbols")

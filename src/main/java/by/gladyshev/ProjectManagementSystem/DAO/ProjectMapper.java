@@ -1,9 +1,7 @@
 package by.gladyshev.ProjectManagementSystem.DAO;
 
-import by.gladyshev.ProjectManagementSystem.entity.Project;
-import by.gladyshev.ProjectManagementSystem.model.Model;
+import by.gladyshev.ProjectManagementSystem.model.MyModel;
 import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
-import by.gladyshev.ProjectManagementSystem.model.UserModel;
 import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
 import by.gladyshev.ProjectManagementSystem.repository.UserRepository;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectMapper implements RowMapper<Model> {
+public class ProjectMapper implements RowMapper<MyModel> {
     @Override
     public ProjectModel mapRow(ResultSet resultSet, int i) throws SQLException {
         ProjectModel pm = new ProjectModel();
@@ -50,7 +48,7 @@ public class ProjectMapper implements RowMapper<Model> {
         }
         return devs;
     }
-    private void repositoryUpdate(Model pm) {
+    private void repositoryUpdate(MyModel pm) {
         for (int i = 0; i < ProjectRepository.INSTANCE.Size(); i++) {
             if(ProjectRepository.INSTANCE.get(i).equals(pm))
             {

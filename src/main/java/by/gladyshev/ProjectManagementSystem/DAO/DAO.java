@@ -1,7 +1,6 @@
 package by.gladyshev.ProjectManagementSystem.DAO;
 
-import by.gladyshev.ProjectManagementSystem.model.Model;
-import by.gladyshev.ProjectManagementSystem.repository.Search;
+import by.gladyshev.ProjectManagementSystem.model.MyModel;
 import by.gladyshev.ProjectManagementSystem.repository.Storage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,20 +13,20 @@ public class DAO {
     protected final JdbcTemplate jdbcTemplate;
     protected int ID;
     protected String table;
-    protected RowMapper<Model> rm;
+    protected RowMapper<MyModel> rm;
     protected Storage repository;
     @Autowired
     public DAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-    public Model show(int id)
+    public MyModel show(int id)
     {
         return jdbcTemplate.query("SELECT * FROM "+table+" WHERE id =?", new Object[]{id}, rm)
                 .stream().findAny().orElse(null);
     }
     public void delete(int id)
     {
-        Model temp;
+        MyModel temp;
         for (int i = 0; i < repository.Size(); i++) {
             temp = repository.get(i);
             if(temp.getId()==id)
@@ -38,7 +37,7 @@ public class DAO {
         }
         jdbcTemplate.update("DELETE FROM "+table+" WHERE id =?", id);
     }
-    public void save(Model pm)
+    public void save(MyModel pm)
     {
         ID++;
         Field[] fields = pm.getClass().getDeclaredFields();
@@ -55,7 +54,7 @@ public class DAO {
         pm.setId(ID);
         repository.add(pm);
     }
-    public void update(Model pm)
+    public void update(MyModel pm)
     {
         jdbcTemplate.update("UPDATE "+table+" SET name=? WHERE id=?", pm.getName(), pm.getId());
     }

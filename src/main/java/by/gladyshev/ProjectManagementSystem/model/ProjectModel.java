@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ProjectModel implements Model {
+public class ProjectModel implements MyModel {
     private int id;
     @NotEmpty(message = "Project name can not be empty")
     @Size(min = 1, max = 150, message = "Name length should be more than 1 and less than 150 symbols")

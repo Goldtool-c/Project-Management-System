@@ -1,6 +1,6 @@
 package by.gladyshev.ProjectManagementSystem.model;
 
-public interface Model {
+public interface MyModel {
     String getName();
     int getId();
     void setId(int id);

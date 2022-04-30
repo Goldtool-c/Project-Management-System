@@ -1,15 +1,15 @@
 package by.gladyshev.ProjectManagementSystem.repository;
 
-import by.gladyshev.ProjectManagementSystem.model.Model;
+import by.gladyshev.ProjectManagementSystem.model.MyModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public enum TaskRepository implements Storage {
     INSTANCE;
-    private List<Model> tasks = new ArrayList<>();
+    private List<MyModel> tasks = new ArrayList<>();
     @Override
-    public List<Model> getAll() {
+    public List<MyModel> getAll() {
         return tasks;
     }
 
@@ -22,22 +22,22 @@ public enum TaskRepository implements Storage {
 
     }
     @Override
-    public Model getByCriteria(Criteria criteria) throws IllegalAccessException {
+    public MyModel getByCriteria(Criteria criteria) throws IllegalAccessException {
        return Search.search(criteria, this);
     }
 
     @Override
-    public void setAll(List<Model> projects) {
+    public void setAll(List<MyModel> projects) {
         this.tasks = projects;
     }
 
     @Override
-    public void add(Model pm) {
+    public void add(MyModel pm) {
         tasks.add(pm);
     }
 
     @Override
-    public Model get(int id) {
+    public MyModel get(int id) {
         return tasks.get(id);
     }
 }
