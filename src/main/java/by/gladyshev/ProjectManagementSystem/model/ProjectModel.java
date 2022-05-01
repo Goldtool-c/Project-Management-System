@@ -16,7 +16,7 @@ public class ProjectModel implements MyModel {
     @Size(min = 1, max = 150, message = "Name length should be more than 1 and less than 150 symbols")
     private String name;
     private List<UserModel> developers = new ArrayList<>();
-    //private List<Task> tasks;
+    private List<TaskModel> tasks = new ArrayList<>();
 
 
     public ProjectModel(int id, String name) {
@@ -88,6 +88,23 @@ public class ProjectModel implements MyModel {
         return true;
     }
 
+    public String[] getUserNames()//get dev names
+    {
+        String[] names = new String[developers.size()];
+        for (int i = 0; i < names.length ; i++) {
+            names[i] = developers.get(i).getName();
+        }
+        return names;
+    }
+
+    public String[] getTaskNames()//get dev names
+    {
+        String[] names = new String[tasks.size()];
+        for (int i = 0; i < names.length ; i++) {
+            names[i] = tasks.get(i).getName();
+        }
+        return names;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -101,4 +118,5 @@ public class ProjectModel implements MyModel {
     public int hashCode() {
         return Objects.hash(id, name);
     }
+
 }

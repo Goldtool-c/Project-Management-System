@@ -2,6 +2,7 @@ package by.gladyshev.ProjectManagementSystem.DAO;
 
 import by.gladyshev.ProjectManagementSystem.model.MyModel;
 import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
+import by.gladyshev.ProjectManagementSystem.model.TaskModel;
 import by.gladyshev.ProjectManagementSystem.model.UserModel;
 import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class ProjectDAO extends DAO{
                     repository.get(i).setName(pm.getName());
                 }
             }
-            String users = parseName(((ProjectModel) pm).getDevelopers());
+            String users = parseName(((ProjectModel) pm).getUserNames());
             jdbcTemplate.update("UPDATE " + table + " SET name=?, developers=? WHERE id=?", pm.getName(), users, pm.getId());
         } else
         {
@@ -50,14 +51,17 @@ public class ProjectDAO extends DAO{
             jdbcTemplate.update("UPDATE " + table + " SET name=? WHERE id=?", pm.getName(), pm.getId());
         }
     }
-    private String parseName(List<UserModel> users)
+    private String parseName(String[] names)
     {
         StringBuilder sb = new StringBuilder();
-        sb.append(users.get(0).getName());
-        for (int i = 1; i < users.size(); i++) {
-            sb.append(",");
-            sb.append(users.get(i).getName());
+        if(names.length!=0) {
+            sb.append(names[0]);
+            for (int i = 1; i < names.length; i++) {
+                sb.append(",");
+                sb.append(names[i]);
+            }
         }
         return sb.toString();
     }
+
 }

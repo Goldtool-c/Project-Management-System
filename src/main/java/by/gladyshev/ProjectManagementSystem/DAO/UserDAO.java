@@ -1,6 +1,10 @@
 package by.gladyshev.ProjectManagementSystem.DAO;
 
+import by.gladyshev.ProjectManagementSystem.entity.user.User;
 import by.gladyshev.ProjectManagementSystem.model.MyModel;
+import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
+import by.gladyshev.ProjectManagementSystem.model.UserModel;
+import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
 import by.gladyshev.ProjectManagementSystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -37,5 +41,58 @@ public class UserDAO extends DAO {
         }
         pm.setId(ID);
         repository.add(pm);
+    }
+    @Override
+    public void delete(int id)
+    {
+        MyModel temp = null;
+        for (int i = 0; i < repository.Size(); i++) {
+            temp = repository.get(i);
+            if(temp.getId()==id)
+            {
+                repository.delete(i);
+                break;
+            }
+        }
+        ProjectModel tempProject;
+        UserModel tempUser;
+        for (int i = 0; i < ProjectRepository.INSTANCE.Size(); i++) {
+            tempProject = (ProjectModel) ProjectRepository.INSTANCE.get(i);
+            for (int j = 0; j < tempProject.getDevelopers().size(); j++) {
+                tempUser = tempProject.getDevelopers().get(j);
+                if(temp.equals(tempUser))
+                {
+                    tempProject.getDevelopers().remove(j);
+                    System.out.println("User "+temp+" deleted from "+tempProject);
+                    updateProjectDB(i);
+                    break;
+                }
+            }
+        }
+        jdbcTemplate.update("DELETE FROM "+table+" WHERE id =?", id);
+    }
+    private void updateProjectDB(int i)
+    {
+        ProjectModel pm = (ProjectModel) ProjectRepository.INSTANCE.get(i);
+        String users = parseName(pm.getUserNames());
+        if(!users.equals("")) {
+            jdbcTemplate.update("UPDATE project SET name=?, developers=? WHERE id=?", pm.getName(), users, pm.getId());
+        } else {
+            jdbcTemplate.update("UPDATE project SET name=?, developers=null WHERE id=?", pm.getName(), pm.getId());
+        }
+
+    }
+    private String parseName(String[] names)
+    {
+        StringBuilder sb = new StringBuilder();
+        if(names.length!=0) {
+            sb.append(names[0]);
+            for (int i = 1; i < names.length; i++) {
+                sb.append(",");
+                sb.append(names[i]);
+            }
+            return sb.toString();
+        }
+        return "";
     }
 }

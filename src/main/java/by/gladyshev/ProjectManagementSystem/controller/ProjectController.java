@@ -213,8 +213,6 @@ public class ProjectController {
     {
         int n = pm.size()/10+1;
         int res[];
-        System.out.println("size%10="+pm.size()%10);
-        System.out.println(pm.size());
         if(pm.size()%10==0)
         {
             res = new int[n-1];

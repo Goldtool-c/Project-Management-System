@@ -62,6 +62,7 @@ public class UserModel implements MyModel {
     public void setPassword(int password) {
         this.password = password;
     }
+
     @Override
     public String toString() {
         return this.name;
