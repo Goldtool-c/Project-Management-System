@@ -1,8 +1,11 @@
 package by.gladyshev.ProjectManagementSystem.DAO;
 
+import by.gladyshev.ProjectManagementSystem.entity.Task;
 import by.gladyshev.ProjectManagementSystem.model.MyModel;
 import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
+import by.gladyshev.ProjectManagementSystem.model.TaskModel;
 import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
+import by.gladyshev.ProjectManagementSystem.repository.TaskRepository;
 import by.gladyshev.ProjectManagementSystem.repository.UserRepository;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -25,7 +28,15 @@ public class ProjectMapper implements RowMapper<MyModel> {
                 }
                 repositoryUpdate(pm);
             }
-
+            if(TaskRepository.INSTANCE.Size()!=0) {
+                List<String> tasks = parseName(resultSet.getString("tasks"));
+                for (int j = 0; j < tasks.size(); j++) {
+                    pm.addTask(tasks.get(j));
+                }
+                System.out.println("начинаем обнолять репозиторий");
+                repositoryUpdate(pm);
+                System.out.println("заканчиваем");
+            }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -52,6 +63,7 @@ public class ProjectMapper implements RowMapper<MyModel> {
         for (int i = 0; i < ProjectRepository.INSTANCE.Size(); i++) {
             if(ProjectRepository.INSTANCE.get(i).equals(pm))
             {
+                System.out.println("обновили");
                 ProjectRepository.INSTANCE.getAll().set(i, pm);
             }
         }

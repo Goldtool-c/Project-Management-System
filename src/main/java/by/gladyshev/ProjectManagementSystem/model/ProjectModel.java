@@ -2,6 +2,7 @@ package by.gladyshev.ProjectManagementSystem.model;
 
 import by.gladyshev.ProjectManagementSystem.repository.Criteria;
 import by.gladyshev.ProjectManagementSystem.repository.Search;
+import by.gladyshev.ProjectManagementSystem.repository.TaskRepository;
 import by.gladyshev.ProjectManagementSystem.repository.UserRepository;
 
 import javax.validation.constraints.NotEmpty;
@@ -73,6 +74,21 @@ public class ProjectModel implements MyModel {
             // else todo exception
         }//todo exception
     }
+    public void addTask(TaskModel task)
+    {
+        tasks.add(task);
+    }
+    public void addTask(String task)
+    {
+        TaskModel tm = null;
+        try {
+            tm = (TaskModel) Search.search(new Criteria("name", task), TaskRepository.INSTANCE);
+            tasks.add(tm);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+    //public void setTasks()
     public void assignDeveloper(UserModel um)
     {
         if(duplicateValid(um)) {developers.add(um);}
@@ -104,6 +120,13 @@ public class ProjectModel implements MyModel {
             names[i] = tasks.get(i).getName();
         }
         return names;
+    }
+    public List<TaskModel> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<TaskModel> tasks) {
+        this.tasks = tasks;
     }
     @Override
     public boolean equals(Object o) {

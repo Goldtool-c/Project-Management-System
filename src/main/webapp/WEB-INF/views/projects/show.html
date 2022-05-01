@@ -13,6 +13,9 @@ Assigned devs:
 <div th:each="dev:${projectModel.getDevelopers()}">
     <a th:href="@{/users/{id}(id=${dev.getId()})}" th:text="${dev.getName()}">VALUE</a>
 </div>
+<div th:each="task:${projectModel.getTasks()}">
+    <a th:text="${task.getShortName()}">VALUE</a>
+</div>
 <a th:href="@{/projects/{id}/edit(id=${projectModel.getId()})}">Edit</a>
 <br>
 <form th:method="DELETE" th:action="@{/projects/{id}(id=${projectModel.getId()})}">

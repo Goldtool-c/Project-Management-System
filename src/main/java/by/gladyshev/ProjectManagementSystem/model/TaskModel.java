@@ -1,25 +1,57 @@
 package by.gladyshev.ProjectManagementSystem.model;
 
-public class TaskModel {
+public class TaskModel implements MyModel{
     private int id;
     private String name;
+    private String shortName;
 
     public TaskModel() {
     }
-
+    @Override
     public int getId() {
         return id;
     }
-
+    @Override
     public void setId(int id) {
         this.id = id;
     }
-
+    @Override
     public String getName() {
         return name;
     }
-
+    @Override
     public void setName(String name) {
         this.name = name;
+        setShortName();
+    }
+    public String getShortName() {
+        return shortName;
+    }
+
+    private void setShortName() {
+        StringBuilder sb = new StringBuilder();
+        boolean flag = false;
+        for (int i = 0; i < name.length() ; i++) {
+            if(flag)
+            {
+                sb.append(name.charAt(i));
+            }
+            else{
+                if(name.charAt(i)=='|')
+                {
+                    flag=true;
+                }
+            }
+            shortName = sb.toString();
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "TaskModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", shortName='" + shortName + '\'' +
+                '}';
     }
 }

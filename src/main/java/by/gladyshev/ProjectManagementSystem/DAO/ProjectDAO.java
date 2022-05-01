@@ -39,7 +39,9 @@ public class ProjectDAO extends DAO{
                 }
             }
             String users = parseName(((ProjectModel) pm).getUserNames());
-            jdbcTemplate.update("UPDATE " + table + " SET name=?, developers=? WHERE id=?", pm.getName(), users, pm.getId());
+            String tasks = parseName(((ProjectModel) pm).getTaskNames());
+            jdbcTemplate.update("UPDATE " + table + " SET name=?, developers=?, tasks=? WHERE id=?",
+                    pm.getName(), users, tasks, pm.getId());
         } else
         {
             for (int i = 0; i < repository.Size(); i++) {

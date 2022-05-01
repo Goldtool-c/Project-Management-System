@@ -12,6 +12,7 @@
     <br/>
     <br>
     <a th:href="@{/projects/{id}/assign(id=${projectModel.getId()})}">Assign developer</a>
+    <a th:href="@{/projects/createTask/{id}(id=${projectModel.getId()})}">Create Task</a>
     <br>
     <input type="submit" value="Update!"/>
 </form>

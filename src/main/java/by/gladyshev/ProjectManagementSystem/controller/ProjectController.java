@@ -1,9 +1,11 @@
 package by.gladyshev.ProjectManagementSystem.controller;
 
 import by.gladyshev.ProjectManagementSystem.DAO.ProjectDAO;
+import by.gladyshev.ProjectManagementSystem.DAO.TaskDAO;
 import by.gladyshev.ProjectManagementSystem.DAO.UserDAO;
 import by.gladyshev.ProjectManagementSystem.model.MyModel;
 import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
+import by.gladyshev.ProjectManagementSystem.model.TaskModel;
 import by.gladyshev.ProjectManagementSystem.model.UserModel;
 import by.gladyshev.ProjectManagementSystem.repository.Criteria;
 import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
@@ -28,13 +30,15 @@ import java.util.List;
 public class ProjectController {
     private ProjectDAO DAO;
     private UserDAO userDAO;
+    private TaskDAO taskDAO;
     private List<String> sort = new ArrayList<>();
     private String currentSort = "id";
     private ShowAccessValidator accessValid = ShowAccessValidator.getInstance();
     private List<MyModel> filtered = new ArrayList<>();
     private int activePage = 1;
-    public ProjectController(@Autowired ProjectDAO dao,@Autowired UserDAO userDAO)
+    public ProjectController(@Autowired ProjectDAO dao,@Autowired UserDAO userDAO, @Autowired TaskDAO taskDAO)
     {
+        this.taskDAO = taskDAO;
         this.userDAO = userDAO;
         this.DAO = dao;
         sort.add("id");
@@ -168,6 +172,13 @@ public class ProjectController {
         }
         return "redirect:/error/notEnoughRights";
     }
+    @GetMapping("/createTask/{id}")
+    public String createTask(@PathVariable("id") int id, Model model)
+    {
+        model.addAttribute("projectId", id);
+        model.addAttribute("task", new TaskModel());
+        return "projects/createTask";
+    }
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("projectModel")@Valid ProjectModel pm, BindingResult br,
                          @PathVariable("id")int id)
@@ -208,6 +219,24 @@ public class ProjectController {
         System.out.println(filter);
         filtered = ProjectFilter.filter(filter);
         return "redirect:/projects/filter";
+    }
+    @PostMapping("/createTask/{id}")
+    public String createTask(@PathVariable("id") int id, @ModelAttribute("task")TaskModel task)
+    {
+        ProjectModel pm = null;
+        try {
+            pm = (ProjectModel) Search.search(new Criteria("id", id), ProjectRepository.INSTANCE);
+            String newName = pm.getName()+"|"+task.getName();
+            task.setName(newName);
+            taskDAO.save(task);
+            task.setId(taskDAO.getID());
+            System.out.println(pm.getTasks());
+            pm.addTask(task);
+            DAO.update(pm);//todo в проекте новая таска заменяет старую
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return "redirect:/projects/"+id;
     }
     private int[] pagesNumber(List<MyModel> pm)
     {

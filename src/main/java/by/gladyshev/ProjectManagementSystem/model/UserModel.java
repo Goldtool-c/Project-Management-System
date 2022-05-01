@@ -3,6 +3,8 @@ package by.gladyshev.ProjectManagementSystem.model;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class UserModel implements MyModel {
@@ -13,6 +15,7 @@ public class UserModel implements MyModel {
     private String name;
     private int password;
     private String role;
+    private List<TaskModel> tasks = new ArrayList<>();
     public UserModel(int id, String name) {
         this.id = id;
         this.name = name;
@@ -61,6 +64,14 @@ public class UserModel implements MyModel {
 
     public void setPassword(int password) {
         this.password = password;
+    }
+
+    public List<TaskModel> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<TaskModel> tasks) {
+        this.tasks = tasks;
     }
 
     @Override
