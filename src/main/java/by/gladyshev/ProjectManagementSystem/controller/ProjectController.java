@@ -232,7 +232,7 @@ public class ProjectController {
             task.setId(taskDAO.getID());
             System.out.println(pm.getTasks());
             pm.addTask(task);
-            DAO.update(pm);//todo в проекте новая таска заменяет старую
+            DAO.update(pm);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }

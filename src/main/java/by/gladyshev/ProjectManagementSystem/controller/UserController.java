@@ -29,7 +29,6 @@ public class UserController {
     public UserController(@Autowired UserDAO DAO,@Autowired ProjectDAO projectDAO) {
         this.DAO = DAO;
         this.projectDAO = projectDAO;
-        System.out.println("из юзера индекс");
         projectDAO.index("id"); // without this devs wont be assigned due to order of creating beans
         // projectDao creates first, so in order to avoid nullPointerException was decided not to assign developers in
         // projectDao constructor

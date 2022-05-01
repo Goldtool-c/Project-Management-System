@@ -4,7 +4,7 @@ public class TaskModel implements MyModel{
     private int id;
     private String name;
     private String shortName;
-
+    private ProjectModel pm;
     public TaskModel() {
     }
     @Override
@@ -44,6 +44,14 @@ public class TaskModel implements MyModel{
             }
             shortName = sb.toString();
         }
+    }
+
+    public ProjectModel getPm() {
+        return pm;
+    }
+
+    public void setPm(ProjectModel pm) {
+        this.pm = pm;
     }
 
     @Override

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+Project name
+<br>
+<a th:href="@{/projects/{id}(id=${task.getPm().getId()})}" th:text="${task.getPm().getName()}">VALUE</a>
+<br>
+Task name
+<br>
+<a th:text="${task.getShortName()}">VALUE</a>
+</body>
+</html>

@@ -14,7 +14,7 @@ Assigned devs:
     <a th:href="@{/users/{id}(id=${dev.getId()})}" th:text="${dev.getName()}">VALUE</a>
 </div>
 <div th:each="task:${projectModel.getTasks()}">
-    <a th:text="${task.getShortName()}">VALUE</a>
+    <a th:href="@{/tasks/show/{id}(id=${task.getId()})}" th:text="${task.getShortName()}">VALUE</a>
 </div>
 <a th:href="@{/projects/{id}/edit(id=${projectModel.getId()})}">Edit</a>
 <br>

@@ -33,9 +33,7 @@ public class ProjectMapper implements RowMapper<MyModel> {
                 for (int j = 0; j < tasks.size(); j++) {
                     pm.addTask(tasks.get(j));
                 }
-                System.out.println("начинаем обнолять репозиторий");
                 repositoryUpdate(pm);
-                System.out.println("заканчиваем");
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -63,7 +61,6 @@ public class ProjectMapper implements RowMapper<MyModel> {
         for (int i = 0; i < ProjectRepository.INSTANCE.Size(); i++) {
             if(ProjectRepository.INSTANCE.get(i).equals(pm))
             {
-                System.out.println("обновили");
                 ProjectRepository.INSTANCE.getAll().set(i, pm);
             }
         }
