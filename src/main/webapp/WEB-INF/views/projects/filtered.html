@@ -2,9 +2,16 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Projects</title>
 </head>
 <body>
+<div align="left">
+    Go home
+    <a th:href="@{/users/{id}(id=${activeUser.getId()})}" th:text="${activeUser.getName()}">VALUE</a>
+    <a href="/projects">All projects</a>
+</div>
+<div align="center">_______________________________________________________________________________________________________________________________________</div>
+<br>
 <table border="1" width="600">
     <tr><th>Project name</th> <th>Developers</th></tr>
     <div th:each="projectModel:${projects}">

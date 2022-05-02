@@ -32,7 +32,9 @@ public class UserModel implements MyModel {
         this.password = password;
     }
 
-    public UserModel(){}
+    public UserModel(){
+        role = "developer";
+    }
 
     public int getId() {
         return id;

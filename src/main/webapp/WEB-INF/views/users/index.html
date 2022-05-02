@@ -5,6 +5,10 @@
     <title>Title</title>
 </head>
 <body>
+<div align="left">
+    Go home
+    <a th:href="@{/users/{id}(id=${activeUser.getId()})}" th:text="${activeUser.getName()}">VALUE</a>>
+</div>
 <div th:each="userModel:${users}">
     <a th:href="@{users/{id}(id=${userModel.getId()})}" th:text="${userModel.getName()}">VALUE</a>
 </div>

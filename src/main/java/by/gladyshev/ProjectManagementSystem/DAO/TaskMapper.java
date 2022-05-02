@@ -46,7 +46,10 @@ public class TaskMapper implements RowMapper<MyModel> {
             }
             tm.setResponsible(um);
             assert um != null;
-            um.assignTask(tm);
+            if(!isAssigned(um, tm))
+            {
+                um.assignTask(tm);
+            }
             try {
                 um = (UserModel) Search.search(new Criteria("id", resultSet.getInt("developer")), UserRepository.INSTANCE);
             } catch (IllegalAccessException e) {
@@ -54,5 +57,15 @@ public class TaskMapper implements RowMapper<MyModel> {
             }
         }
         return tm;
+    }
+    private boolean isAssigned(UserModel um, TaskModel tm)
+    {
+        for (int i = 0; i < um.getTasks().size(); i++) {
+            if(um.getTasks().get(i).getId()==tm.getId())
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

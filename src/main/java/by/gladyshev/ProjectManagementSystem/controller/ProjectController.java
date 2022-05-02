@@ -52,6 +52,7 @@ public class ProjectController {
             for (int i = 0; i < pm.size()&&i<10; i++) {
                 show.add(pm.get(i));
             }
+            model.addAttribute("activeUser", ActiveUser.getActiveUser());
             model.addAttribute("projects", show);
             model.addAttribute("sort", sort);
             model.addAttribute("pages", pagesNumber(ProjectRepository.INSTANCE.getAll()));
@@ -72,6 +73,7 @@ public class ProjectController {
             for (int i = ((id-1)*10); i < pm.size()&&i<(id*10); i++) {
                 show.add(pm.get(i));
             }
+            model.addAttribute("activeUser", ActiveUser.getActiveUser());
             model.addAttribute("projects", show);
             model.addAttribute("sort", sort);
             model.addAttribute("pages", pagesNumber(ProjectRepository.INSTANCE.getAll()));
@@ -86,6 +88,7 @@ public class ProjectController {
     public String show(@PathVariable("id") int id, Model model)
     {
         if(accessValid.showValid((ProjectModel) DAO.show(id))) {
+            model.addAttribute("activeUser", ActiveUser.getActiveUser());
             model.addAttribute("projectModel", DAO.show(id));
             return "projects/show";
         } else
@@ -97,6 +100,7 @@ public class ProjectController {
     public String edit(@PathVariable("id") int id,Model model)
     {
         if(ActiveUser.getActiveUser().getRole().equals("admin")) {
+            model.addAttribute("activeUser", ActiveUser.getActiveUser());
             model.addAttribute("projectModel", DAO.show(id));
             return "projects/edit";
         } else {
@@ -148,6 +152,7 @@ public class ProjectController {
     public String filter(Model model)
     {
         activePage = 1;
+        model.addAttribute("activeUser", ActiveUser.getActiveUser());
         model.addAttribute("projects", filtered);
         model.addAttribute("pages", pagesNumber(filtered));
         return "projects/filtered";
@@ -156,6 +161,7 @@ public class ProjectController {
     public String pageFilter(@PathVariable("id") int id, Model model)
     {
         if(ActiveUser.getActiveUser().getRole().equals("admin")) {
+            model.addAttribute("activeUser", ActiveUser.getActiveUser());
             activePage=id;
             List<MyModel> pm = filtered;
             List<MyModel> show = new ArrayList<>();
@@ -172,6 +178,7 @@ public class ProjectController {
     @GetMapping("/createTask/{id}")
     public String createTask(@PathVariable("id") int id, Model model)
     {
+        model.addAttribute("activeUser", ActiveUser.getActiveUser());
         model.addAttribute("projectId", id);
         model.addAttribute("task", new TaskModel());
         return "projects/createTask";

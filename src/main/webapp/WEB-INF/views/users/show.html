@@ -5,6 +5,7 @@
     <title>Title</title>
 </head>
 <body>
+<a href="/users">ALL users</a>
 <div th:text="${'id: '+userModel.getId()}">VALUE</div>
 <div th:text="${'NAME: '+userModel.getName()}">VALUE</div>
 <br>
@@ -24,5 +25,8 @@ Current tasks:
 <form th:method="DELETE" th:action="@{/users/{id}(id=${userModel.getId()})}">
     <input type="submit" value="Delete"/>
 </form>
+<br>
+____________________________________
+<a th:href="@{/login}">log out</a>
 </body>
 </html>

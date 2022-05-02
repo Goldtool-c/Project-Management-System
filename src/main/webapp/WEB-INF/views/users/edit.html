@@ -5,6 +5,11 @@
     <title>Title</title>
 </head>
 <body>
+<div align="left">
+    Go home
+    <a th:href="@{/users/{id}(id=${activeUser.getId()})}" th:text="${activeUser.getName()}">VALUE</a>
+    <a href="/users">All users</a>
+</div>
 <form th:method="PATCH" th:action="@{/users/{id}(id=${userModel.getId()})}" th:object="${userModel}">
     <label for="name">Enter name: </label>
     <input type="text" th:field="*{name}" id="name"/>

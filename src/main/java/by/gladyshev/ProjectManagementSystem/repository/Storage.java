@@ -10,6 +10,6 @@ public interface Storage {
     void setAll(List<MyModel> models);
     List<MyModel> getAll();
     int Size();
-    MyModel getByCriteria(Criteria criteria) throws IllegalAccessException;
+    MyModel getByCriteria(Criteria criteria);
     void delete(int id);
 }

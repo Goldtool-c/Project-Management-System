@@ -2,12 +2,12 @@ package by.gladyshev.ProjectManagementSystem.controller;
 
 import by.gladyshev.ProjectManagementSystem.DAO.ProjectDAO;
 import by.gladyshev.ProjectManagementSystem.DAO.TaskDAO;
-import by.gladyshev.ProjectManagementSystem.DAO.UserDAO;
-import by.gladyshev.ProjectManagementSystem.entity.Task;
 import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
 import by.gladyshev.ProjectManagementSystem.model.TaskModel;
 import by.gladyshev.ProjectManagementSystem.model.UserModel;
 import by.gladyshev.ProjectManagementSystem.repository.*;
+import by.gladyshev.ProjectManagementSystem.util.ActiveUser;
+import by.gladyshev.ProjectManagementSystem.validator.ShowAccessValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,13 +16,14 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/tasks")
 public class TaskController {
     private TaskDAO DAO;
     private ProjectDAO projectDAO;
+    private ShowAccessValidator accessValid = ShowAccessValidator.getInstance();
     public TaskController(@Autowired TaskDAO DAO, @Autowired ProjectDAO projectDAO) {
         this.DAO = DAO;
         this.projectDAO = projectDAO;
@@ -33,23 +34,53 @@ public class TaskController {
     @GetMapping("/show/{id}")
     public String show(@PathVariable("id")int id, Model model)
     {
+
+        model.addAttribute("activeUser", ActiveUser.getActiveUser());
         TaskModel task = (TaskModel) DAO.show(id);
-        System.out.println(task.getPm());
-        model.addAttribute("task", task);
-        return "tasks/show";
+        if(accessValid.showValid(task.getResponsible())) {
+            model.addAttribute("task", task);
+            return "tasks/show";
+        }
+        return "redirect:/error/notEnoughRights";
     }
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") int id, Model model)
     {
+        model.addAttribute("activeUser", ActiveUser.getActiveUser());
         model.addAttribute("task", DAO.show(id));
         return "tasks/edit";
     }
     @GetMapping("/assign/{id}")
     public String assign(@PathVariable("id")int id, Model model)
     {
-        model.addAttribute("task", new TaskModel());
-        model.addAttribute("users", UserRepository.INSTANCE.getAll());
+        model.addAttribute("activeUser", ActiveUser.getActiveUser());
+        List<UserModel> users;
+        TaskModel tm = (TaskModel) TaskRepository.INSTANCE.getByCriteria(new Criteria("id", id));
+        ProjectModel pm = tm.getPm();
+        pm = (ProjectModel) ProjectRepository.INSTANCE.getByCriteria(new Criteria("id", pm.getId()));
+        users = pm.getDevelopers();
+        System.out.println(users);
+        model.addAttribute("taskId", id);
+        model.addAttribute("users", users);
+        model.addAttribute("toAssign", new UserModel());
         return "tasks/assign";
+    }
+    @PostMapping("/assign/{id}")
+    public String assign(@PathVariable("id")int id, @ModelAttribute("toAssign")UserModel um)
+    {
+
+        UserModel toAssign = null;
+        TaskModel tm = null;
+        try {
+            toAssign = (UserModel) Search.search(new Criteria("id", um.getId()), UserRepository.INSTANCE);
+            tm = (TaskModel) Search.search(new Criteria("id", id), TaskRepository.INSTANCE);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        tm.setResponsible(toAssign);
+        toAssign.assignTask(tm);
+        DAO.update(tm);
+        return "redirect:/projects/"+tm.getPm().getId();
     }
     @PostMapping("/edit/{id}")
     public String edit(@PathVariable("id") int id, @ModelAttribute("task")@Valid TaskModel task,

@@ -23,8 +23,14 @@ public enum UserRepository implements Storage {
     }
 
     @Override
-    public MyModel getByCriteria(Criteria criteria) throws IllegalAccessException {
-        return Search.search(criteria, this);
+    public MyModel getByCriteria(Criteria criteria) {
+        MyModel model = null;
+        try {
+             model = Search.search(criteria, this);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return model;
     }
 
     @Override

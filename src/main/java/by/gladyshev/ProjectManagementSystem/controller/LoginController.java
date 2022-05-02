@@ -54,6 +54,7 @@ public class LoginController {
     public String login(Model model)
     {
         model.addAttribute("login", new LoginForm());
+        ActiveUser.setActiveUser(new UserModel());
         return "login/login";
     }
 }

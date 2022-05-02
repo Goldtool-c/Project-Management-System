@@ -43,6 +43,7 @@ public class UserController {
     public String index(Model model)
     {
         if(ActiveUser.getActiveUser().getRole().equals("admin")) {
+            model.addAttribute("activeUser", ActiveUser.getActiveUser());
             model.addAttribute("users", DAO.index("id"));//что-то нехорошее в маппере
             taskDAO.index("id");
             return "users/index";
@@ -54,6 +55,7 @@ public class UserController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model)
     {
+        model.addAttribute("activeUser", ActiveUser.getActiveUser());
         UserModel um = null;
         try {
             um = (UserModel) Search.search(new Criteria("id", id), UserRepository.INSTANCE);
@@ -71,7 +73,7 @@ public class UserController {
                     }
                 }
             }
-
+            System.out.println(um.getTasks());
             model.addAttribute("userModel", um);
             model.addAttribute("projects", projectModels);
             return "users/show";
@@ -83,8 +85,15 @@ public class UserController {
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int id,Model model)
     {
-        if(accessValid.showValid((UserModel) DAO.show(id))) {
-            model.addAttribute("userModel", DAO.show(id));
+        model.addAttribute("activeUser", ActiveUser.getActiveUser());
+        UserModel um = null;
+        try {
+        um = (UserModel) Search.search(new Criteria("id", id), UserRepository.INSTANCE);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        if(accessValid.showValid(um)){
+            model.addAttribute("userModel", um);
             return "users/edit";
         } else
         {

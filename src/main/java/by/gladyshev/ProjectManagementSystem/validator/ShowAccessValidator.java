@@ -10,8 +10,8 @@ public class ShowAccessValidator {
     private static ShowAccessValidator instance;
     private ShowAccessValidator(){}
     public static ShowAccessValidator getInstance() {
-        if(instance == null){		//если объект еще не создан
-            instance = new ShowAccessValidator();	//создать новый объект
+        if(instance == null){
+            instance = new ShowAccessValidator();
         }
         return instance;
     }

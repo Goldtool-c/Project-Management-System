@@ -2,9 +2,16 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Edit</title>
 </head>
 <body>
+<div align="left">
+    Go home
+    <a th:href="@{/users/{id}(id=${activeUser.getId()})}" th:text="${activeUser.getName()}">VALUE</a>
+    <a href="/projects">All projects</a>
+</div>
+<div align="center">_______________________________________________________________________________________________________________________________________</div>
+<br>
 <form th:method="PATCH" th:action="@{/projects/{id}(id=${projectModel.getId()})}" th:object="${projectModel}">
     <label for="name">Enter name: </label>
     <input type="text" th:field="*{name}" id="name"/>

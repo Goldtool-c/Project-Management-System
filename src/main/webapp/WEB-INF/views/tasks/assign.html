@@ -5,6 +5,12 @@
     <title>Title</title>
 </head>
 <body>
-<!--<div th:each=""-->
+Select developer to assign on this task
+<form th:action="@{/tasks/assign/{id}(id=${taskId})}" th:object="${toAssign}" th:method="POST">
+    <select name="users">
+        <option th:each="user : ${users}" th:text="${user.getName()}">VALUE</option>
+    </select>
+    <input type="submit" value="assign">
+</form>
 </body>
 </html>

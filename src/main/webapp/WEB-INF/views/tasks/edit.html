@@ -12,8 +12,10 @@
     <br/>
     <input type="submit" value="Update!"/>
 </form>
+<a th:href="@{/tasks/assign/{id}(id=${task.getId()})}">assign developer</a>
 <form th:method="DELETE" th:action="@{/tasks/{id}(id=${task.getId()})}" th:object="${task}">
     <input type="submit" value="Delete"/>
 </form>
+
 </body>
 </html>

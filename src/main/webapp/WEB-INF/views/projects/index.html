@@ -5,7 +5,12 @@
     <title>Projects</title>
 </head>
 <body>
-
+<div align="left">
+    Go home
+    <a th:href="@{/users/{id}(id=${activeUser.getId()})}" th:text="${activeUser.getName()}">VALUE</a>
+</div>
+<div align="center">_______________________________________________________________________________________________________________________________________</div>
+<br>
 <table border="1" width="600">
     <tr><th>Project name</th> <th>Developers</th></tr>
     <div th:each="projectModel:${projects}">
