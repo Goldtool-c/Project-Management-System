@@ -9,8 +9,13 @@ Project name
 <br>
 <a th:href="@{/projects/{id}(id=${task.getPm().getId()})}" th:text="${task.getPm().getName()}">VALUE</a>
 <br>
+Assigned developer:
+<a th:if="${task.getResponsible().getId()==0}">There aren't any developers assigned on this task</a>
+<a th:if="${task.getResponsible().getId()>0}" th:text="${task.getResponsible().getName()}">value</a>
+<br>
 Task name
 <br>
 <a th:text="${task.getShortName()}">VALUE</a>
+<a th:href="@{/tasks/edit/{id}(id=${task.getId()})}">Edit</a>
 </body>
 </html>

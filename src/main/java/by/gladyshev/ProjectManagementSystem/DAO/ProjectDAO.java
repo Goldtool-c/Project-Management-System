@@ -39,9 +39,15 @@ public class ProjectDAO extends DAO{
                 }
             }
             String users = parseName(((ProjectModel) pm).getUserNames());
-            String tasks = parseName(((ProjectModel) pm).getTaskNames());
-            jdbcTemplate.update("UPDATE " + table + " SET name=?, developers=?, tasks=? WHERE id=?",
-                    pm.getName(), users, tasks, pm.getId());
+            if(((ProjectModel) pm).getTasks().size()!=0) {
+                String tasks = parseName(((ProjectModel) pm).getTaskNames());
+                jdbcTemplate.update("UPDATE " + table + " SET name=?, developers=?, tasks=? WHERE id=?",
+                        pm.getName(), users, tasks, pm.getId());
+            } else
+            {
+                jdbcTemplate.update("UPDATE " + table + " SET name=?, developers=?, tasks=null WHERE id=?",
+                        pm.getName(), users, pm.getId());
+            }
         } else
         {
             for (int i = 0; i < repository.Size(); i++) {
@@ -50,7 +56,15 @@ public class ProjectDAO extends DAO{
                     repository.get(i).setName(pm.getName());
                 }
             }
-            jdbcTemplate.update("UPDATE " + table + " SET name=? WHERE id=?", pm.getName(), pm.getId());
+            if(((ProjectModel) pm).getTasks().size()!=0) {
+                String tasks = parseName(((ProjectModel) pm).getTaskNames());
+                jdbcTemplate.update("UPDATE " + table + " SET name=?, tasks=? WHERE id=?",
+                        pm.getName(), tasks, pm.getId());
+            } else
+            {
+                jdbcTemplate.update("UPDATE " + table + " SET name=?, tasks=null WHERE id=?",
+                        pm.getName(), pm.getId());
+            }
         }
     }
     private String parseName(String[] names)

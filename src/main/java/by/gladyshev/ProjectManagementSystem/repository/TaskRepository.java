@@ -19,7 +19,7 @@ public enum TaskRepository implements Storage {
     }
     @Override
     public void delete(int id) {
-
+        tasks.remove(id);
     }
     @Override
     public MyModel getByCriteria(Criteria criteria) throws IllegalAccessException {

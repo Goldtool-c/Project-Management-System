@@ -1,10 +1,14 @@
 package by.gladyshev.ProjectManagementSystem.model;
 
+import javax.validation.constraints.Size;
+
 public class TaskModel implements MyModel{
     private int id;
+    @Size(min = 1, message = "name cannot be empty")
     private String name;
     private String shortName;
     private ProjectModel pm;
+    private UserModel responsible=new UserModel(0, "");
     public TaskModel() {
     }
     @Override
@@ -24,6 +28,19 @@ public class TaskModel implements MyModel{
         this.name = name;
         setShortName();
     }
+    public void setByShortName(String name)
+    {
+        this.name = pm.getName()+"|"+name;
+        setShortName();
+    }
+    public UserModel getResponsible() {
+        return responsible;
+    }
+
+    public void setResponsible(UserModel responsible) {
+        this.responsible = responsible;
+    }
+
     public String getShortName() {
         return shortName;
     }

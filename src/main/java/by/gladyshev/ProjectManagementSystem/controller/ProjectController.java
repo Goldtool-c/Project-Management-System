@@ -228,6 +228,7 @@ public class ProjectController {
             pm = (ProjectModel) Search.search(new Criteria("id", id), ProjectRepository.INSTANCE);
             String newName = pm.getName()+"|"+task.getName();
             task.setName(newName);
+            task.setPm(pm);
             taskDAO.save(task);
             task.setId(taskDAO.getID());
             System.out.println(pm.getTasks());
