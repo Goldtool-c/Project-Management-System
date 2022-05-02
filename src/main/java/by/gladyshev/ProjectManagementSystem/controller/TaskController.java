@@ -6,10 +6,8 @@ import by.gladyshev.ProjectManagementSystem.DAO.UserDAO;
 import by.gladyshev.ProjectManagementSystem.entity.Task;
 import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
 import by.gladyshev.ProjectManagementSystem.model.TaskModel;
-import by.gladyshev.ProjectManagementSystem.repository.Criteria;
-import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
-import by.gladyshev.ProjectManagementSystem.repository.Search;
-import by.gladyshev.ProjectManagementSystem.repository.TaskRepository;
+import by.gladyshev.ProjectManagementSystem.model.UserModel;
+import by.gladyshev.ProjectManagementSystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,6 +43,13 @@ public class TaskController {
     {
         model.addAttribute("task", DAO.show(id));
         return "tasks/edit";
+    }
+    @GetMapping("/assign/{id}")
+    public String assign(@PathVariable("id")int id, Model model)
+    {
+        model.addAttribute("task", new TaskModel());
+        model.addAttribute("users", UserRepository.INSTANCE.getAll());
+        return "tasks/assign";
     }
     @PostMapping("/edit/{id}")
     public String edit(@PathVariable("id") int id, @ModelAttribute("task")@Valid TaskModel task,
@@ -88,16 +93,15 @@ public class TaskController {
     {
         ProjectModel pm = null;
         TaskModel task = null;
+        UserModel um = null;
         try {
             task = (TaskModel) Search.search(new Criteria("id", id), TaskRepository.INSTANCE);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        System.out.println("ekjfpv");
-        System.out.println(task);
-        System.out.println(task.getPm());
-        try {
+            System.out.println("из трая");
+            System.out.println(task.getPm().getId());
             pm = (ProjectModel) Search.search(new Criteria("id", task.getPm().getId()), ProjectRepository.INSTANCE);
+            if(task.getResponsible()!=null) {
+                um = (UserModel) Search.search(new Criteria("id", task.getResponsible().getId()), UserRepository.INSTANCE);
+            }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -106,6 +110,14 @@ public class TaskController {
             {
                 pm.getTasks().remove(i);
                 break;
+            }
+        }
+        if(um!=null) {
+            for (int i = 0; i < um.getTasks().size(); i++) {
+                if (um.getTask(i).getId() == id) {
+                    um.getTasks().remove(i);
+                    break;
+                }
             }
         }
         projectDAO.update(pm);

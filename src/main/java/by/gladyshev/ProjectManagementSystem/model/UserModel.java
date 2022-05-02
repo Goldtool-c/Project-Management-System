@@ -69,11 +69,17 @@ public class UserModel implements MyModel {
     public List<TaskModel> getTasks() {
         return tasks;
     }
-
+    public TaskModel getTask(int i)
+    {
+        return tasks.get(i);
+    }
     public void setTasks(List<TaskModel> tasks) {
         this.tasks = tasks;
     }
-
+    public void assignTask(TaskModel tm)
+    {
+        tasks.add(tm);
+    }
     @Override
     public String toString() {
         return this.name;

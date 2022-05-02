@@ -8,11 +8,16 @@
 <div th:text="${'id: '+userModel.getId()}">VALUE</div>
 <div th:text="${'NAME: '+userModel.getName()}">VALUE</div>
 <br>
+Projects:
 <div th:each="project : ${projects}">
     <a th:href="@{/projects/{id}
             (id=${project.getId()})}" th:text="${project.getName()}">VALUE</a>
 </div>
-
+<br>
+Current tasks:
+<div th:each="task : ${userModel.getTasks()}">
+    <a th:text="${task.getName()}" th:href="@{/tasks/show/{id}(id=${task.getId()})}">VALUE</a>
+</div>
 <form th:method="GET" th:action="@{/users/{id}/edit(id=${userModel.getId()})}">
     <input type="submit" value="Edit"/>
 </form>

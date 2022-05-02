@@ -1,13 +1,15 @@
 package by.gladyshev.ProjectManagementSystem.controller;
 
 import by.gladyshev.ProjectManagementSystem.DAO.ProjectDAO;
+import by.gladyshev.ProjectManagementSystem.DAO.TaskDAO;
 import by.gladyshev.ProjectManagementSystem.DAO.UserDAO;
 import by.gladyshev.ProjectManagementSystem.entity.Project;
+import by.gladyshev.ProjectManagementSystem.entity.Task;
 import by.gladyshev.ProjectManagementSystem.entity.User;
 import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
+import by.gladyshev.ProjectManagementSystem.model.TaskModel;
 import by.gladyshev.ProjectManagementSystem.model.UserModel;
-import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
-import by.gladyshev.ProjectManagementSystem.repository.UserRepository;
+import by.gladyshev.ProjectManagementSystem.repository.*;
 import by.gladyshev.ProjectManagementSystem.util.ActiveUser;
 import by.gladyshev.ProjectManagementSystem.validator.ShowAccessValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +27,24 @@ import java.util.List;
 public class UserController {
     private UserDAO DAO;
     private ProjectDAO projectDAO;
+    private TaskDAO taskDAO;
     private ShowAccessValidator accessValid = ShowAccessValidator.getInstance();
-    public UserController(@Autowired UserDAO DAO,@Autowired ProjectDAO projectDAO) {
+    public UserController(@Autowired UserDAO DAO,@Autowired ProjectDAO projectDAO,@Autowired TaskDAO taskDAO) {
         this.DAO = DAO;
         this.projectDAO = projectDAO;
+        this.taskDAO = taskDAO;
         projectDAO.index("id"); // without this devs wont be assigned due to order of creating beans
-        // projectDao creates first, so in order to avoid nullPointerException was decided not to assign developers in
+        // projectDao creates first, so in order to avoid nullPointerException it was decided not to assign developers in
         // projectDao constructor
+        taskDAO.index("id"); //same reason
+
     }
     @GetMapping
     public String index(Model model)
     {
         if(ActiveUser.getActiveUser().getRole().equals("admin")) {
-            model.addAttribute("users", DAO.index("id"));
+            model.addAttribute("users", DAO.index("id"));//что-то нехорошее в маппере
+            taskDAO.index("id");
             return "users/index";
         } else
         {
@@ -47,7 +54,12 @@ public class UserController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model)
     {
-        UserModel um = (UserModel) DAO.show(id);
+        UserModel um = null;
+        try {
+            um = (UserModel) Search.search(new Criteria("id", id), UserRepository.INSTANCE);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
         if(accessValid.showValid(um)) {
             List<ProjectModel> projectModels = new ArrayList<>();
             List<UserModel> temp;
@@ -59,6 +71,7 @@ public class UserController {
                     }
                 }
             }
+
             model.addAttribute("userModel", um);
             model.addAttribute("projects", projectModels);
             return "users/show";

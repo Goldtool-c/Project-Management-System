@@ -1,16 +1,13 @@
 package by.gladyshev.ProjectManagementSystem.DAO;
 
 import by.gladyshev.ProjectManagementSystem.model.MyModel;
-import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
 import by.gladyshev.ProjectManagementSystem.model.TaskModel;
-import by.gladyshev.ProjectManagementSystem.repository.Criteria;
-import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
-import by.gladyshev.ProjectManagementSystem.repository.Search;
 import by.gladyshev.ProjectManagementSystem.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class TaskDAO extends DAO {
@@ -27,7 +24,7 @@ public class TaskDAO extends DAO {
             ID=0;
         }
         repository = TaskRepository.INSTANCE;
-        repository.setAll(index("id"));
+        TaskRepository.INSTANCE.setAll(index("id"));
     }
     @Override
     public void update(MyModel tm)

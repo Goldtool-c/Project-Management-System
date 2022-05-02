@@ -4,10 +4,8 @@ import by.gladyshev.ProjectManagementSystem.entity.Project;
 import by.gladyshev.ProjectManagementSystem.model.MyModel;
 import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
 import by.gladyshev.ProjectManagementSystem.model.TaskModel;
-import by.gladyshev.ProjectManagementSystem.repository.Criteria;
-import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
-import by.gladyshev.ProjectManagementSystem.repository.Search;
-import by.gladyshev.ProjectManagementSystem.repository.TaskRepository;
+import by.gladyshev.ProjectManagementSystem.model.UserModel;
+import by.gladyshev.ProjectManagementSystem.repository.*;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -34,13 +32,26 @@ public class TaskMapper implements RowMapper<MyModel> {
         try {
             ProjectModel pm = (ProjectModel) Search.search(new Criteria("name", sb.toString()),
                     ProjectRepository.INSTANCE);
-            System.out.println("из таск маппера");
-            System.out.println(sb.toString());
-            System.out.println(pm.getId());
             tm.setPm(pm);
-            System.out.println(tm.getPm());
+
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+        }
+        if(UserRepository.INSTANCE.Size()!=0&&resultSet.getInt("developer")!=0) {
+            UserModel um = null;
+            try {
+                um = (UserModel) Search.search(new Criteria("id", resultSet.getInt("developer")), UserRepository.INSTANCE);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            tm.setResponsible(um);
+            assert um != null;
+            um.assignTask(tm);
+            try {
+                um = (UserModel) Search.search(new Criteria("id", resultSet.getInt("developer")), UserRepository.INSTANCE);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
         return tm;
     }

@@ -8,7 +8,7 @@ public class TaskModel implements MyModel{
     private String name;
     private String shortName;
     private ProjectModel pm;
-    private UserModel responsible=new UserModel(0, "");
+    private UserModel responsible;
     public TaskModel() {
     }
     @Override
