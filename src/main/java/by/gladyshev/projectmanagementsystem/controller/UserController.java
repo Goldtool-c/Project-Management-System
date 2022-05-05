@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -128,6 +129,12 @@ public class UserController {
     @PostMapping()
     public String create(@ModelAttribute("userModel")@Valid User user, BindingResult br)
     {
+        UserModel dublicate = (UserModel) UserRepository.INSTANCE.getByCriteria(new Criteria("name", user.getName()));
+        if(dublicate!=null)
+        {
+            FieldError error = new FieldError("userModel", "name", "This user already exists");
+            br.addError(error);
+        }
         if(br.hasErrors())
         {
             return "users/new";

@@ -24,6 +24,7 @@ Current tasks:
 <div th:each="task:${projectModel.getTasks()}">
     <a th:href="@{/tasks/show/{id}(id=${task.getId()})}" th:text="${task.getShortName()}">VALUE</a>
 </div>
+____________________
 <a th:href="@{/projects/{id}/edit(id=${projectModel.getId()})}">Edit</a>
 <br>
 <form th:method="POST" th:action="@{/projects/delete/{id}(id=${projectModel.getId()})}">

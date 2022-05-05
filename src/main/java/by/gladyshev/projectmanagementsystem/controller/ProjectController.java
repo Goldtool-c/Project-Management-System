@@ -15,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -211,7 +213,16 @@ public class ProjectController {
         {
             return "projects/new";
         }
-        DAO.save(pm);
+        ProjectModel dublicate = (ProjectModel) ProjectRepository.INSTANCE.getByCriteria(new Criteria("name", pm.getName()));
+        if(dublicate==null) {
+            DAO.save(pm);
+        } else
+        {
+            FieldError error = new FieldError("projectModel", "name", "project "+pm.getName()+
+                    " already exists");
+            br.addError(error);
+            return "projects/new";
+        }
         return "redirect:/projects";
     }
     @PostMapping("/sort")
@@ -228,12 +239,21 @@ public class ProjectController {
         return "redirect:/projects/filter";
     }
     @PostMapping("/createTask/{id}")
-    public String createTask(@PathVariable("id") int id, @ModelAttribute("task")TaskModel task)
+    public String createTask(@PathVariable("id") int id, @ModelAttribute("task")@Valid TaskModel task, BindingResult br)
     {
-        ProjectModel pm = null;
+        ProjectModel pm;
         try {
             pm = (ProjectModel) Search.search(new Criteria("id", id), ProjectRepository.INSTANCE);
             String newName = pm.getName()+"|"+task.getName();
+            TaskModel dublicate = (TaskModel) TaskRepository.INSTANCE.getByCriteria(
+                    new Criteria("name", newName)
+            );
+            if(dublicate!=null)
+            {
+                FieldError error = new FieldError("task", "name", "Task with this name already exists");
+                br.addError(error);
+                return "projects/createTask";
+            }
             task.setName(newName);
             task.setPm(pm);
             taskDAO.save(task);
