@@ -6,9 +6,12 @@ import by.gladyshev.projectmanagementsystem.model.ProjectModel;
 import by.gladyshev.projectmanagementsystem.model.TaskModel;
 import by.gladyshev.projectmanagementsystem.model.UserModel;
 import by.gladyshev.projectmanagementsystem.repository.*;
+import by.gladyshev.projectmanagementsystem.service.TaskDeleteService;
+import by.gladyshev.projectmanagementsystem.service.TaskUpdateService;
 import by.gladyshev.projectmanagementsystem.util.ActiveUser;
 import by.gladyshev.projectmanagementsystem.validator.ShowAccessValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -100,70 +103,14 @@ public class TaskController {
         if (br.hasErrors()) {
             return "tasks/edit";
         }
-        TaskModel res = null;
-        try {
-            res = (TaskModel) Search.search(new Criteria("id", task.getId()), TaskRepository.INSTANCE);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        assert res != null;
-        res.setByShortName(task.getName());
-        DAO.update(res);
-        ProjectModel pm = null;
-        try {
-            pm = (ProjectModel) Search.search(new Criteria("id", res.getPm().getId()),
-                    ProjectRepository.INSTANCE);
-            for (int i = 0; i < pm.getTasks().size(); i++) {
-                if(pm.getTasks().get(i).getId()==res.getId())
-                {
-                    pm.getTasks().set(i, res);
-                }
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        projectDAO.update(pm);
+        TaskUpdateService.update(id, task, DAO, projectDAO);
         return "redirect:/tasks/show/"+id;
     }
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id")int id)
     {
-        ProjectModel pm = null;
-        TaskModel task = null;
-        UserModel um = null;
-        try {
-            task = (TaskModel) Search.search(new Criteria("id", id), TaskRepository.INSTANCE);
-            pm = (ProjectModel) Search.search(new Criteria("id", task.getPm().getId()), ProjectRepository.INSTANCE);
-            if(task.getResponsible()!=null) {
-                um = (UserModel) Search.search(new Criteria("id", task.getResponsible().getId()), UserRepository.INSTANCE);
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        for (int i = 0; i < pm.getTasks().size() ; i++) {
-            if(pm.getTasks().get(i).getId()==id)
-            {
-                pm.getTasks().remove(i);
-                break;
-            }
-        }
-        if(um!=null) {
-            for (int i = 0; i < um.getTasks().size(); i++) {
-                if (um.getTask(i).getId() == id) {
-                    um.getTasks().remove(i);
-                    break;
-                }
-            }
-        }
-        projectDAO.update(pm);
-        for (int i = 0; i < TaskRepository.INSTANCE.Size(); i++) {
-            if(TaskRepository.INSTANCE.get(i).getId()==id)
-            {
-                TaskRepository.INSTANCE.delete(i);
-                break;
-            }
-        }
-        DAO.delete(id);
-        return "redirect:/projects/"+pm.getId();
+        int pmId = TaskDeleteService.delete(id, DAO, projectDAO);
+
+        return "redirect:/projects/"+pmId;
     }
 }

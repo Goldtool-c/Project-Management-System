@@ -8,6 +8,8 @@ import by.gladyshev.projectmanagementsystem.model.ProjectModel;
 import by.gladyshev.projectmanagementsystem.model.TaskModel;
 import by.gladyshev.projectmanagementsystem.model.UserModel;
 import by.gladyshev.projectmanagementsystem.repository.*;
+import by.gladyshev.projectmanagementsystem.service.ProjectAssignDeveloperService;
+import by.gladyshev.projectmanagementsystem.service.ProjectUpdateService;
 import by.gladyshev.projectmanagementsystem.util.ActiveUser;
 import by.gladyshev.projectmanagementsystem.util.ProjectFilter;
 import by.gladyshev.projectmanagementsystem.validator.ShowAccessValidator;
@@ -135,17 +137,8 @@ public class ProjectController {
     public String assign(@PathVariable("uId")int uId, @PathVariable("pId")int pId)
     {
         if(ActiveUser.getActiveUser().getRole().equals("admin")) {
-            UserModel um;
-            ProjectModel pm = null;
-            try {
-                pm = (ProjectModel) Search.search(new Criteria("id", pId), ProjectRepository.INSTANCE);
-                um = (UserModel) Search.search(new Criteria("id", uId), UserRepository.INSTANCE);
-                pm.assignDeveloper(um);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            DAO.update(pm);
-            return "redirect:/projects/" + pm.getId();
+            int pmId = ProjectAssignDeveloperService.assign(uId, pId, DAO);
+            return "redirect:/projects/" + pmId;
         } else {
             return "redirect:/error/notEnoughRights";
         }
@@ -192,12 +185,7 @@ public class ProjectController {
         if (br.hasErrors()) {
             return "projects/edit";
         }
-        ProjectModel pm1 = (ProjectModel) ProjectRepository.INSTANCE.getByCriteria(new Criteria("id", id));
-        pm1.setName(pm.getName());
-        for (int i = 0; i < pm1.getTasks().size(); i++) {
-            taskDAO.update(pm1.getTasks().get(i));
-        }
-        DAO.update(pm1);
+        ProjectUpdateService.update(pm, taskDAO, DAO, id);
         return "redirect:/projects";
     }
     @PostMapping("/delete/{id}")
