@@ -20,7 +20,8 @@ import javax.sql.DataSource;
 @Configuration
 @ComponentScan("by.gladyshev.projectmanagementsystem")
 @EnableWebMvc
-public class SpringConfig implements WebMvcConfigurer {
+public class
+SpringConfig implements WebMvcConfigurer {
     private final ApplicationContext context;
     @Autowired
     public SpringConfig(ApplicationContext context)
