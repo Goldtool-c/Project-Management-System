@@ -66,6 +66,7 @@ public class UserController {
         if(accessValid.showValid(um)) {
             List<ProjectModel> projectModels = new ArrayList<>();
             List<UserModel> temp;
+            //get all projects this user assigned to
             for (int i = 0; i < ProjectRepository.INSTANCE.Size(); i++) {
                 temp = ((ProjectModel) ProjectRepository.INSTANCE.get(i)).getDevelopers();
                 for (UserModel userModel : temp) {
@@ -129,6 +130,7 @@ public class UserController {
     @PostMapping()
     public String create(@ModelAttribute("userModel")@Valid User user, BindingResult br)
     {
+        //does user with this name already exists?
         UserModel dublicate = (UserModel) UserRepository.INSTANCE.getByCriteria(new Criteria("name", user.getName()));
         if(dublicate!=null)
         {
@@ -157,9 +159,7 @@ public class UserController {
                 {
                     ((ProjectModel)ProjectRepository.INSTANCE.get(i)).getDevelopers().set(j, pm);
                 }
-            }//idk why, but when we edit username, it appears that user(name=x, id=y) in project.developers and
-            //user(name=x, id=y) in UserRepository are not same object, so it was decided to update users in
-            //projects manually
+            }
             projectDAO.update(ProjectRepository.INSTANCE.get(i));
         }
     }

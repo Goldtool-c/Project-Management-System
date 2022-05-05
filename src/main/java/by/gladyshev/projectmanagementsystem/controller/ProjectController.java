@@ -51,7 +51,7 @@ public class ProjectController {
         if(ActiveUser.getActiveUser().getRole().equals("admin")) {
             List<ProjectModel> pm = DAO.index(currentSort);
             List<ProjectModel> show = new ArrayList<>();
-            for (int i = 0; i < pm.size()&&i<10; i++) {
+            for (int i = 0; i < pm.size()&&i<10; i++) {//get first 10 to display them on a page
                 show.add(pm.get(i));
             }
             model.addAttribute("activeUser", ActiveUser.getActiveUser());
@@ -72,7 +72,7 @@ public class ProjectController {
             activePage=id;
             List<ProjectModel> pm = DAO.index(currentSort);
             List<ProjectModel> show = new ArrayList<>();
-            for (int i = ((id-1)*10); i < pm.size()&&i<(id*10); i++) {
+            for (int i = ((id-1)*10); i < pm.size()&&i<(id*10); i++) {///get 10 to display them on a page
                 show.add(pm.get(i));
             }
             model.addAttribute("activeUser", ActiveUser.getActiveUser());
@@ -244,7 +244,7 @@ public class ProjectController {
         ProjectModel pm;
         try {
             pm = (ProjectModel) Search.search(new Criteria("id", id), ProjectRepository.INSTANCE);
-            String newName = pm.getName()+"|"+task.getName();
+            String newName = pm.getName()+"|"+task.getName();//setname to task in format 'projectName|taskName'
             TaskModel dublicate = (TaskModel) TaskRepository.INSTANCE.getByCriteria(
                     new Criteria("name", newName)
             );
@@ -252,6 +252,14 @@ public class ProjectController {
             {
                 FieldError error = new FieldError("task", "name", "Task with this name already exists");
                 br.addError(error);
+            }
+            if(task.getName().contains("|"))
+            {
+                FieldError error = new FieldError("task", "name", "symbol '|' is forbidden");
+                br.addError(error);
+            }
+            if(br.hasErrors())
+            {
                 return "projects/createTask";
             }
             task.setName(newName);

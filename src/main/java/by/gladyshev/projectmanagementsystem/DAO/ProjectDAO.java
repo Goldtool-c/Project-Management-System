@@ -65,7 +65,7 @@ public class ProjectDAO extends DAO{
             }
         }
     }
-    private String parseName(String[] names)
+    private String parseName(String[] names)//format "name1,name2,name3,...,nameN"
     {
         StringBuilder sb = new StringBuilder();
         if(names.length!=0) {

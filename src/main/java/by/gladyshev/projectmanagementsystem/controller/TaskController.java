@@ -43,6 +43,7 @@ public class TaskController {
                 return "tasks/show";
             }
         }
+        //if responsible==null, only admin should have access to params of this task
         if(ActiveUser.getActiveUser().getRole().equals("admin"))
         {
             model.addAttribute("task", task);

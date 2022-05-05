@@ -22,6 +22,7 @@ public class TaskMapper implements RowMapper<MyModel> {
             tm.setId(resultSet.getInt("id"));
             tm.setName(resultSet.getString("name"));
             StringBuilder sb = new StringBuilder();
+            //get ProjectName from taskName, then find project in repository and add it to this task
             for (int j = 0; j < tm.getName().length(); j++) {
                 if (tm.getName().charAt(j) != '|') {
                     sb.append(tm.getName().charAt(j));
@@ -37,6 +38,7 @@ public class TaskMapper implements RowMapper<MyModel> {
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
+            //assigned developer in tasksTable defines by theirs id
             if (UserRepository.INSTANCE.Size() != 0 && resultSet.getInt("developer") != 0) {
                 UserModel um = null;
                 try {
