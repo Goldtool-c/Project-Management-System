@@ -1,12 +1,10 @@
-package by.gladyshev.ProjectManagementSystem.DAO;
+package by.gladyshev.projectmanagementsystem.DAO;
 
-import by.gladyshev.ProjectManagementSystem.model.MyModel;
-import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
-import by.gladyshev.ProjectManagementSystem.model.TaskModel;
-import by.gladyshev.ProjectManagementSystem.model.UserModel;
-import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
-import by.gladyshev.ProjectManagementSystem.repository.TaskRepository;
-import by.gladyshev.ProjectManagementSystem.repository.UserRepository;
+import by.gladyshev.projectmanagementsystem.model.MyModel;
+import by.gladyshev.projectmanagementsystem.model.ProjectModel;
+import by.gladyshev.projectmanagementsystem.model.UserModel;
+import by.gladyshev.projectmanagementsystem.repository.ProjectRepository;
+import by.gladyshev.projectmanagementsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -37,6 +35,7 @@ public class UserDAO extends DAO {
                 values[i] = fields[i].get(pm);
             }
             jdbcTemplate.update("INSERT INTO "+table+" values(?, ?, ?, ?)", ID, values[1], values[2], "developer");//[1] -- name
+            jdbcTemplate.update("UPDATE "+table+" set flag='true' where id=?", ID);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -70,7 +69,7 @@ public class UserDAO extends DAO {
                 }
             }
         }
-        jdbcTemplate.update("DELETE FROM "+table+" WHERE id =?", id);
+        jdbcTemplate.update("UPDATE "+table+" set flag = 'false' WHERE id =?", id);
     }
     private void updateProjectDB(int i)
     {

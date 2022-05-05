@@ -1,12 +1,10 @@
-package by.gladyshev.ProjectManagementSystem.DAO;
+package by.gladyshev.projectmanagementsystem.DAO;
 
-import by.gladyshev.ProjectManagementSystem.entity.Task;
-import by.gladyshev.ProjectManagementSystem.model.MyModel;
-import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
-import by.gladyshev.ProjectManagementSystem.model.TaskModel;
-import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
-import by.gladyshev.ProjectManagementSystem.repository.TaskRepository;
-import by.gladyshev.ProjectManagementSystem.repository.UserRepository;
+import by.gladyshev.projectmanagementsystem.model.MyModel;
+import by.gladyshev.projectmanagementsystem.model.ProjectModel;
+import by.gladyshev.projectmanagementsystem.repository.ProjectRepository;
+import by.gladyshev.projectmanagementsystem.repository.TaskRepository;
+import by.gladyshev.projectmanagementsystem.repository.UserRepository;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -18,27 +16,32 @@ public class ProjectMapper implements RowMapper<MyModel> {
     @Override
     public ProjectModel mapRow(ResultSet resultSet, int i) throws SQLException {
         ProjectModel pm = new ProjectModel();
-        try {
-            pm.setId(resultSet.getInt("id"));
-            pm.setName(resultSet.getString("name"));
-            if(UserRepository.INSTANCE.Size()!=0) {
-                List<String> devs = parseName(resultSet.getString("developers"));
-                for (int j = 0; j < devs.size(); j++) {
-                    pm.assignDeveloper(devs.get(j));
+        if(resultSet.getString("flag").equals("true")) {
+            try {
+                pm.setId(resultSet.getInt("id"));
+                pm.setName(resultSet.getString("name"));
+                if (UserRepository.INSTANCE.Size() != 0) {
+                    List<String> devs = parseName(resultSet.getString("developers"));
+                    for (int j = 0; j < devs.size(); j++) {
+                        pm.assignDeveloper(devs.get(j));
+                    }
+                    repositoryUpdate(pm);
                 }
-                repositoryUpdate(pm);
-            }
-            if(TaskRepository.INSTANCE.Size()!=0) {
-                List<String> tasks = parseName(resultSet.getString("tasks"));
-                for (int j = 0; j < tasks.size(); j++) {
-                    pm.addTask(tasks.get(j));
+                if (TaskRepository.INSTANCE.Size() != 0) {
+                    List<String> tasks = parseName(resultSet.getString("tasks"));
+                    for (int j = 0; j < tasks.size(); j++) {
+                        pm.addTask(tasks.get(j));
+                    }
+                    repositoryUpdate(pm);
                 }
-                repositoryUpdate(pm);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
             }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            return pm;
+        } else
+        {
+            return null;
         }
-        return pm;
     }
     private List<String> parseName(String name)
     {

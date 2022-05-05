@@ -1,8 +1,8 @@
-package by.gladyshev.ProjectManagementSystem.validator;
+package by.gladyshev.projectmanagementsystem.validator;
 
-import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
-import by.gladyshev.ProjectManagementSystem.model.UserModel;
-import by.gladyshev.ProjectManagementSystem.util.ActiveUser;
+import by.gladyshev.projectmanagementsystem.model.ProjectModel;
+import by.gladyshev.projectmanagementsystem.model.UserModel;
+import by.gladyshev.projectmanagementsystem.util.ActiveUser;
 
 import java.util.List;
 

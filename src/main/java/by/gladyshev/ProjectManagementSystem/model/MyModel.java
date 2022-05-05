@@ -1,4 +1,4 @@
-package by.gladyshev.ProjectManagementSystem.model;
+package by.gladyshev.projectmanagementsystem.model;
 
 public interface MyModel {
     String getName();

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Projects</title>
+</head>
+<body>
+<div align="left">
+    Go home
+    <a th:href="@{/users/{id}(id=${activeUser.getId()})}" th:text="${activeUser.getName()}">VALUE</a>
+</div>
+<div align="center">_______________________________________________________________________________________________________________________________________</div>
+<br>
+<table border="1" width="600">
+    <tr><th>Project name</th> <th>Developers</th></tr>
+    <div th:each="projectModel:${projects}">
+        <tr><td><a th:href="@{/projects/{id}
+            (id=${projectModel.getId()})}" th:text="${projectModel.getName()}">VALUE</a></td>
+            <td><a th:href="@{/projects/{id}
+        (id=${projectModel.getId()})}" th:text="${projectModel.getDevelopers()}">VALUE</a></td></tr>
+    </div>
+</table>
+Page:
+<nobr th:each="page:${pages}">
+    <a th:href="@{/projects/page/{id}(id=${page})}" th:text="${page} "
+       th:if="${page==activePage} " style="color:brown">VALUE</a>
+    <a th:href="@{/projects/page/{id}(id=${page})}" th:text="${page} "
+       th:if="${page!=activePage}">VALUE</a>
+</nobr>
+<br>
+Sort by:
+<form th:action="@{/projects/sort}" th:object="${sort}" method="POST">
+    <select name="sort">
+        <option th:each="type : ${sort}" th:text="${type}">VALUE</option>
+    </select>
+    <input type="submit" value="Sort">
+</form>
+<br>
+Filter by
+<form method="POST" th:object="${filter}" th:action="@{/projects/filter}">
+    <label for="userName">Enter username</label>
+    <input type="text" th:field="*{userName}" id="userName"/>
+    <label for="projectName">Enter projectName</label>
+    <input type="text" th:field="*{projectName}" id="projectName"/>
+    <input type="submit" value="filter"/>
+</form>
+<a href="/projects/new">Create new project</a>
+</body>
+</html>

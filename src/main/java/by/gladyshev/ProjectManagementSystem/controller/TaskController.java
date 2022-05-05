@@ -1,13 +1,13 @@
-package by.gladyshev.ProjectManagementSystem.controller;
+package by.gladyshev.projectmanagementsystem.controller;
 
-import by.gladyshev.ProjectManagementSystem.DAO.ProjectDAO;
-import by.gladyshev.ProjectManagementSystem.DAO.TaskDAO;
-import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
-import by.gladyshev.ProjectManagementSystem.model.TaskModel;
-import by.gladyshev.ProjectManagementSystem.model.UserModel;
-import by.gladyshev.ProjectManagementSystem.repository.*;
-import by.gladyshev.ProjectManagementSystem.util.ActiveUser;
-import by.gladyshev.ProjectManagementSystem.validator.ShowAccessValidator;
+import by.gladyshev.projectmanagementsystem.DAO.ProjectDAO;
+import by.gladyshev.projectmanagementsystem.DAO.TaskDAO;
+import by.gladyshev.projectmanagementsystem.model.ProjectModel;
+import by.gladyshev.projectmanagementsystem.model.TaskModel;
+import by.gladyshev.projectmanagementsystem.model.UserModel;
+import by.gladyshev.projectmanagementsystem.repository.*;
+import by.gladyshev.projectmanagementsystem.util.ActiveUser;
+import by.gladyshev.projectmanagementsystem.validator.ShowAccessValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,7 +37,14 @@ public class TaskController {
 
         model.addAttribute("activeUser", ActiveUser.getActiveUser());
         TaskModel task = (TaskModel) DAO.show(id);
-        if(accessValid.showValid(task.getResponsible())) {
+        if(task.getResponsible()!=null) {
+            if (accessValid.showValid(task.getResponsible())) {
+                model.addAttribute("task", task);
+                return "tasks/show";
+            }
+        }
+        if(ActiveUser.getActiveUser().getRole().equals("admin"))
+        {
             model.addAttribute("task", task);
             return "tasks/show";
         }
@@ -59,26 +66,24 @@ public class TaskController {
         ProjectModel pm = tm.getPm();
         pm = (ProjectModel) ProjectRepository.INSTANCE.getByCriteria(new Criteria("id", pm.getId()));
         users = pm.getDevelopers();
-        System.out.println(users);
         model.addAttribute("taskId", id);
         model.addAttribute("users", users);
-        model.addAttribute("toAssign", new UserModel());
+        //model.addAttribute("toAssign", new UserModel());
         return "tasks/assign";
     }
-    @PostMapping("/assign/{id}")
-    public String assign(@PathVariable("id")int id, @ModelAttribute("toAssign")UserModel um)
+    @GetMapping("/assign/{TaskId}/{UserId}")
+    public String assign(@PathVariable("TaskId")int taskId, @PathVariable("UserId")int userId, @ModelAttribute("toAssign")String um)
     {
 
         UserModel toAssign = null;
         TaskModel tm = null;
         try {
-            toAssign = (UserModel) Search.search(new Criteria("id", um.getId()), UserRepository.INSTANCE);
-            tm = (TaskModel) Search.search(new Criteria("id", id), TaskRepository.INSTANCE);
+            toAssign = (UserModel) Search.search(new Criteria("id", userId), UserRepository.INSTANCE);
+            tm = (TaskModel) Search.search(new Criteria("id", taskId), TaskRepository.INSTANCE);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         tm.setResponsible(toAssign);
-        toAssign.assignTask(tm);
         DAO.update(tm);
         return "redirect:/projects/"+tm.getPm().getId();
     }
@@ -119,7 +124,7 @@ public class TaskController {
         projectDAO.update(pm);
         return "redirect:/tasks/show/"+id;
     }
-    @DeleteMapping("/{id}")
+    @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id")int id)
     {
         ProjectModel pm = null;
@@ -127,8 +132,6 @@ public class TaskController {
         UserModel um = null;
         try {
             task = (TaskModel) Search.search(new Criteria("id", id), TaskRepository.INSTANCE);
-            System.out.println("из трая");
-            System.out.println(task.getPm().getId());
             pm = (ProjectModel) Search.search(new Criteria("id", task.getPm().getId()), ProjectRepository.INSTANCE);
             if(task.getResponsible()!=null) {
                 um = (UserModel) Search.search(new Criteria("id", task.getResponsible().getId()), UserRepository.INSTANCE);
@@ -152,7 +155,6 @@ public class TaskController {
             }
         }
         projectDAO.update(pm);
-        System.out.println("size = "+pm.getTasks().size());
         for (int i = 0; i < TaskRepository.INSTANCE.Size(); i++) {
             if(TaskRepository.INSTANCE.get(i).getId()==id)
             {

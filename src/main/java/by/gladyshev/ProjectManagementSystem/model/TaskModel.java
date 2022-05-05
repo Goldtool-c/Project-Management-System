@@ -1,4 +1,4 @@
-package by.gladyshev.ProjectManagementSystem.model;
+package by.gladyshev.projectmanagementsystem.model;
 
 import javax.validation.constraints.Size;
 

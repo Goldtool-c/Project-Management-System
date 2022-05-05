@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a href="/users">ALL users</a> <br>
+<a href="/projects">ALL projects</a>
+<div th:text="${'id: '+userModel.getId()}">VALUE</div>
+<div th:text="${'NAME: '+userModel.getName()}">VALUE</div>
+<br>
+Projects:
+<div th:each="project : ${projects}">
+    <a th:href="@{/projects/{id}
+            (id=${project.getId()})}" th:text="${project.getName()}">VALUE</a>
+</div>
+<br>
+Current tasks:
+<div th:each="task : ${userModel.getTasks()}">
+    <a th:text="${task.getName()}" th:href="@{/tasks/show/{id}(id=${task.getId()})}">VALUE</a>
+</div>
+<form th:method="GET" th:action="@{/users/{id}/edit(id=${userModel.getId()})}">
+    <input type="submit" value="Edit"/>
+</form>
+<form th:method="POST" th:action="@{/users/delete/{id}(id=${userModel.getId()})}">
+    <input type="submit" value="Delete"/>
+</form>
+<br>
+____________________________________
+<a th:href="@{/login}">log out</a>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package by.gladyshev.ProjectManagementSystem.repository;
+package by.gladyshev.projectmanagementsystem.repository;
 
 public class Criteria {
     private String property;

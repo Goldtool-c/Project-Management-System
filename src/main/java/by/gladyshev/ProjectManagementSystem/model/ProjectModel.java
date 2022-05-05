@@ -1,9 +1,9 @@
-package by.gladyshev.ProjectManagementSystem.model;
+package by.gladyshev.projectmanagementsystem.model;
 
-import by.gladyshev.ProjectManagementSystem.repository.Criteria;
-import by.gladyshev.ProjectManagementSystem.repository.Search;
-import by.gladyshev.ProjectManagementSystem.repository.TaskRepository;
-import by.gladyshev.ProjectManagementSystem.repository.UserRepository;
+import by.gladyshev.projectmanagementsystem.repository.Criteria;
+import by.gladyshev.projectmanagementsystem.repository.Search;
+import by.gladyshev.projectmanagementsystem.repository.TaskRepository;
+import by.gladyshev.projectmanagementsystem.repository.UserRepository;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -49,6 +49,7 @@ public class ProjectModel implements MyModel {
 
     public void setName(String name) {
         this.name = name;
+        setTasksNames();
     }
 
     public List<UserModel> getDevelopers() {
@@ -125,6 +126,18 @@ public class ProjectModel implements MyModel {
         return tasks;
     }
 
+    private void setTasksNames()
+    {
+        if(tasks.size()!=0)
+        {
+            TaskModel temp;
+            for (int i = 0; i < tasks.size(); i++) {
+                temp = tasks.get(i);
+                temp.setPm(this);
+                temp.setByShortName(temp.getShortName());
+            }
+        }
+    }
     public void setTasks(List<TaskModel> tasks) {
         this.tasks = tasks;
     }

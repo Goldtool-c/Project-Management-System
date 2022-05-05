@@ -1,16 +1,16 @@
-package by.gladyshev.ProjectManagementSystem.controller;
+package by.gladyshev.projectmanagementsystem.controller;
 
-import by.gladyshev.ProjectManagementSystem.DAO.ProjectDAO;
-import by.gladyshev.ProjectManagementSystem.DAO.TaskDAO;
-import by.gladyshev.ProjectManagementSystem.DAO.UserDAO;
-import by.gladyshev.ProjectManagementSystem.model.MyModel;
-import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
-import by.gladyshev.ProjectManagementSystem.model.TaskModel;
-import by.gladyshev.ProjectManagementSystem.model.UserModel;
-import by.gladyshev.ProjectManagementSystem.repository.*;
-import by.gladyshev.ProjectManagementSystem.util.ActiveUser;
-import by.gladyshev.ProjectManagementSystem.util.ProjectFilter;
-import by.gladyshev.ProjectManagementSystem.validator.ShowAccessValidator;
+import by.gladyshev.projectmanagementsystem.DAO.ProjectDAO;
+import by.gladyshev.projectmanagementsystem.DAO.TaskDAO;
+import by.gladyshev.projectmanagementsystem.DAO.UserDAO;
+import by.gladyshev.projectmanagementsystem.model.MyModel;
+import by.gladyshev.projectmanagementsystem.model.ProjectModel;
+import by.gladyshev.projectmanagementsystem.model.TaskModel;
+import by.gladyshev.projectmanagementsystem.model.UserModel;
+import by.gladyshev.projectmanagementsystem.repository.*;
+import by.gladyshev.projectmanagementsystem.util.ActiveUser;
+import by.gladyshev.projectmanagementsystem.util.ProjectFilter;
+import by.gladyshev.projectmanagementsystem.validator.ShowAccessValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -183,18 +183,22 @@ public class ProjectController {
         model.addAttribute("task", new TaskModel());
         return "projects/createTask";
     }
-    @PatchMapping("/{id}")
+    @PostMapping("/{id}")
     public String update(@ModelAttribute("projectModel")@Valid ProjectModel pm, BindingResult br,
                          @PathVariable("id")int id)
     {
         if (br.hasErrors()) {
             return "projects/edit";
         }
-
-        DAO.update(pm);
+        ProjectModel pm1 = (ProjectModel) ProjectRepository.INSTANCE.getByCriteria(new Criteria("id", id));
+        pm1.setName(pm.getName());
+        for (int i = 0; i < pm1.getTasks().size(); i++) {
+            taskDAO.update(pm1.getTasks().get(i));
+        }
+        DAO.update(pm1);
         return "redirect:/projects";
     }
-    @DeleteMapping("/{id}")
+    @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id")int id)
     {
         DAO.delete(id);
@@ -220,7 +224,6 @@ public class ProjectController {
     @PostMapping("/filter")
     public String filter(@ModelAttribute("filter") ProjectFilter filter)
     {
-        System.out.println(filter);
         filtered = ProjectFilter.filter(filter);
         return "redirect:/projects/filter";
     }
@@ -235,7 +238,6 @@ public class ProjectController {
             task.setPm(pm);
             taskDAO.save(task);
             task.setId(taskDAO.getID());
-            System.out.println(pm.getTasks());
             pm.addTask(task);
             DAO.update(pm);
         } catch (IllegalAccessException e) {

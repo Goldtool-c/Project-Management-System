@@ -1,6 +1,6 @@
-package by.gladyshev.ProjectManagementSystem.repository;
+package by.gladyshev.projectmanagementsystem.repository;
 
-import by.gladyshev.ProjectManagementSystem.model.MyModel;
+import by.gladyshev.projectmanagementsystem.model.MyModel;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

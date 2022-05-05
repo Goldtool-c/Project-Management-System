@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+Select developer to assign on this task
+<div th:each="user : ${users}">
+    <a th:text="${user.getName()}" th:href="@{/tasks/assign/{TaskId}/{UserId}
+    (TaskId=${taskId}, UserId=${user.getId()})}">Value</a>
+</div>
+</body>
+</html>

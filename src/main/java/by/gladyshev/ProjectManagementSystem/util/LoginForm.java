@@ -1,4 +1,4 @@
-package by.gladyshev.ProjectManagementSystem.util;
+package by.gladyshev.projectmanagementsystem.util;
 
 public class LoginForm {
     private String login;

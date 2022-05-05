@@ -1,10 +1,8 @@
-package by.gladyshev.ProjectManagementSystem.DAO;
+package by.gladyshev.projectmanagementsystem.DAO;
 
-import by.gladyshev.ProjectManagementSystem.model.MyModel;
-import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
-import by.gladyshev.ProjectManagementSystem.model.TaskModel;
-import by.gladyshev.ProjectManagementSystem.model.UserModel;
-import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
+import by.gladyshev.projectmanagementsystem.model.MyModel;
+import by.gladyshev.projectmanagementsystem.model.ProjectModel;
+import by.gladyshev.projectmanagementsystem.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;

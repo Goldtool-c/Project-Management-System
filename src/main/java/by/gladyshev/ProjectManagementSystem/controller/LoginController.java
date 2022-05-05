@@ -1,15 +1,13 @@
-package by.gladyshev.ProjectManagementSystem.controller;
+package by.gladyshev.projectmanagementsystem.controller;
 
-import by.gladyshev.ProjectManagementSystem.DAO.ProjectDAO;
-import by.gladyshev.ProjectManagementSystem.DAO.UserDAO;
-import by.gladyshev.ProjectManagementSystem.entity.user.User;
-import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
-import by.gladyshev.ProjectManagementSystem.model.UserModel;
-import by.gladyshev.ProjectManagementSystem.repository.Criteria;
-import by.gladyshev.ProjectManagementSystem.repository.Search;
-import by.gladyshev.ProjectManagementSystem.repository.UserRepository;
-import by.gladyshev.ProjectManagementSystem.util.ActiveUser;
-import by.gladyshev.ProjectManagementSystem.util.LoginForm;
+import by.gladyshev.projectmanagementsystem.DAO.ProjectDAO;
+import by.gladyshev.projectmanagementsystem.DAO.UserDAO;
+import by.gladyshev.projectmanagementsystem.model.UserModel;
+import by.gladyshev.projectmanagementsystem.repository.Criteria;
+import by.gladyshev.projectmanagementsystem.repository.Search;
+import by.gladyshev.projectmanagementsystem.repository.UserRepository;
+import by.gladyshev.projectmanagementsystem.util.ActiveUser;
+import by.gladyshev.projectmanagementsystem.util.LoginForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/login")

@@ -1,13 +1,12 @@
-package by.gladyshev.ProjectManagementSystem.util;
+package by.gladyshev.projectmanagementsystem.util;
 
-import by.gladyshev.ProjectManagementSystem.entity.Project;
-import by.gladyshev.ProjectManagementSystem.model.MyModel;
-import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
-import by.gladyshev.ProjectManagementSystem.model.UserModel;
-import by.gladyshev.ProjectManagementSystem.repository.Criteria;
-import by.gladyshev.ProjectManagementSystem.repository.ProjectRepository;
-import by.gladyshev.ProjectManagementSystem.repository.Search;
-import by.gladyshev.ProjectManagementSystem.repository.UserRepository;
+import by.gladyshev.projectmanagementsystem.model.MyModel;
+import by.gladyshev.projectmanagementsystem.model.ProjectModel;
+import by.gladyshev.projectmanagementsystem.model.UserModel;
+import by.gladyshev.projectmanagementsystem.repository.Criteria;
+import by.gladyshev.projectmanagementsystem.repository.ProjectRepository;
+import by.gladyshev.projectmanagementsystem.repository.Search;
+import by.gladyshev.projectmanagementsystem.repository.UserRepository;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -64,23 +63,15 @@ public class ProjectFilter {
                 }
             }
         }
-        System.out.println("Вызываем проектный фильтр");
         res = projectNameFilter(res, filter);
-        System.out.println("Он кончил");
         return res;
     }
     private static List<MyModel> projectNameFilter(List<MyModel> toFilter, ProjectFilter filter)
     {
         List<MyModel> res = new ArrayList<>();
         ProjectModel temp;
-        System.out.println("Залетаем в цикл");
-        System.out.println(toFilter.size());
         for (MyModel myModel : toFilter) {
             temp = (ProjectModel) myModel;
-            System.out.println("temp: "+temp.getName());
-            System.out.println("filter: "+filter.getProjectName());
-            System.out.println(temp.getName().contains(filter.getProjectName()));
-            System.out.println("______________");
             if (temp.getName().contains(filter.getProjectName())) {
                 res.add(temp);
             }

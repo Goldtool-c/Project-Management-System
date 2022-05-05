@@ -1,4 +1,4 @@
-package by.gladyshev.ProjectManagementSystem.model;
+package by.gladyshev.projectmanagementsystem.model;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;

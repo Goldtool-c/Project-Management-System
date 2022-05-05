@@ -1,6 +1,6 @@
-package by.gladyshev.ProjectManagementSystem.util;
+package by.gladyshev.projectmanagementsystem.util;
 
-import by.gladyshev.ProjectManagementSystem.model.UserModel;
+import by.gladyshev.projectmanagementsystem.model.UserModel;
 
 public class ActiveUser {
     private static UserModel activeUser = new UserModel();

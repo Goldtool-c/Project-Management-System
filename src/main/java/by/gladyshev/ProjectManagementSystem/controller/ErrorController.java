@@ -1,6 +1,6 @@
-package by.gladyshev.ProjectManagementSystem.controller;
+package by.gladyshev.projectmanagementsystem.controller;
 
-import by.gladyshev.ProjectManagementSystem.util.ActiveUser;
+import by.gladyshev.projectmanagementsystem.util.ActiveUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

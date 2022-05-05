@@ -1,17 +1,17 @@
-package by.gladyshev.ProjectManagementSystem.controller;
+package by.gladyshev.projectmanagementsystem.controller;
 
-import by.gladyshev.ProjectManagementSystem.DAO.ProjectDAO;
-import by.gladyshev.ProjectManagementSystem.DAO.TaskDAO;
-import by.gladyshev.ProjectManagementSystem.DAO.UserDAO;
-import by.gladyshev.ProjectManagementSystem.entity.Project;
-import by.gladyshev.ProjectManagementSystem.entity.Task;
-import by.gladyshev.ProjectManagementSystem.entity.User;
-import by.gladyshev.ProjectManagementSystem.model.ProjectModel;
-import by.gladyshev.ProjectManagementSystem.model.TaskModel;
-import by.gladyshev.ProjectManagementSystem.model.UserModel;
-import by.gladyshev.ProjectManagementSystem.repository.*;
-import by.gladyshev.ProjectManagementSystem.util.ActiveUser;
-import by.gladyshev.ProjectManagementSystem.validator.ShowAccessValidator;
+import by.gladyshev.projectmanagementsystem.DAO.ProjectDAO;
+import by.gladyshev.projectmanagementsystem.DAO.TaskDAO;
+import by.gladyshev.projectmanagementsystem.DAO.UserDAO;
+import by.gladyshev.projectmanagementsystem.entity.User;
+import by.gladyshev.projectmanagementsystem.model.ProjectModel;
+import by.gladyshev.projectmanagementsystem.model.UserModel;
+import by.gladyshev.projectmanagementsystem.repository.Criteria;
+import by.gladyshev.projectmanagementsystem.repository.ProjectRepository;
+import by.gladyshev.projectmanagementsystem.repository.Search;
+import by.gladyshev.projectmanagementsystem.repository.UserRepository;
+import by.gladyshev.projectmanagementsystem.util.ActiveUser;
+import by.gladyshev.projectmanagementsystem.validator.ShowAccessValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -73,7 +73,6 @@ public class UserController {
                     }
                 }
             }
-            System.out.println(um.getTasks());
             model.addAttribute("userModel", um);
             model.addAttribute("projects", projectModels);
             return "users/show";
@@ -109,7 +108,7 @@ public class UserController {
             return "redirect:/error/notEnoughRights";
         }
     }
-    @PatchMapping("/{id}")
+    @PostMapping("/{id}")
     public String update(@ModelAttribute("userModel")@Valid UserModel um, BindingResult br,
                          @PathVariable("id")int id)
     {
@@ -120,7 +119,7 @@ public class UserController {
         repositoryUpdate(um);
         return "redirect:/users";
     }
-    @DeleteMapping("/{id}")
+    @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id")int id)
     {
         DAO.delete(id);
@@ -139,8 +138,6 @@ public class UserController {
     }
     private void repositoryUpdate(UserModel pm) {
         for (int i = 0; i < UserRepository.INSTANCE.Size(); i++) {
-            System.out.println(UserRepository.INSTANCE.get(i)+" equals "+
-                    pm+" is "+ UserRepository.INSTANCE.get(i).equals(pm));
             if(UserRepository.INSTANCE.get(i).getId()==pm.getId())
             {
                 UserRepository.INSTANCE.get(i).setName(pm.getName());

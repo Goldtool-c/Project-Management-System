@@ -1,7 +1,7 @@
-package by.gladyshev.ProjectManagementSystem.DAO;
+package by.gladyshev.projectmanagementsystem.DAO;
 
-import by.gladyshev.ProjectManagementSystem.model.MyModel;
-import by.gladyshev.ProjectManagementSystem.repository.Storage;
+import by.gladyshev.projectmanagementsystem.model.MyModel;
+import by.gladyshev.projectmanagementsystem.repository.Storage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -35,7 +35,7 @@ public class DAO {
                 break;
             }
         }
-        jdbcTemplate.update("DELETE FROM "+table+" WHERE id =?", id);
+        jdbcTemplate.update("UPDATE "+table+" set flag = 'false' WHERE id =?", id);
     }
     public void save(MyModel pm)
     {
@@ -48,6 +48,7 @@ public class DAO {
                 values[i] = fields[i].get(pm);
             }
             jdbcTemplate.update("INSERT INTO "+table+" values(?, ?)", ID, values[1]);//[1] -- name
+            jdbcTemplate.update("UPDATE "+table+" set flag='true' where id=?", ID);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -60,7 +61,15 @@ public class DAO {
     }
     public List index(String sortType)
     {
-        return jdbcTemplate.query("SELECT * FROM "+table+" order by "+parseSort(sortType), rm);
+        List list = jdbcTemplate.query("SELECT * FROM "+table+" order by "+parseSort(sortType), rm);
+        for (int i = 0; i <list.size() ; i++) {
+            if(list.get(i)==null)
+            {
+                list.remove(i);
+                i--;
+            }
+        }
+        return list;
     }
     public int getID() {
         return ID;
