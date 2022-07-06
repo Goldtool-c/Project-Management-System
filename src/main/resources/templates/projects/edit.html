@@ -10,7 +10,9 @@
     <a th:href="@{/users/{id}(id=${activeUser.getId()})}" th:text="${activeUser.getName()}">VALUE</a>
     <a href="/projects">All projects</a>
 </div>
-<div align="center">_______________________________________________________________________________________________________________________________________</div>
+<div align="center">
+    _______________________________________________________________________________________________________________________________________
+</div>
 <br>
 <form th:method="POST" th:action="@{/projects/{id}(id=${projectModel.getId()})}" th:object="${projectModel}">
     <label for="name">Enter name: </label>

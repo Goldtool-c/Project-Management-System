@@ -16,6 +16,8 @@ public class UserModel implements MyModel {
     private int password;
     private String role;
     private List<TaskModel> tasks = new ArrayList<>();
+    private boolean flag;
+
     public UserModel(int id, String name) {
         this.id = id;
         this.name = name;
@@ -32,7 +34,7 @@ public class UserModel implements MyModel {
         this.password = password;
     }
 
-    public UserModel(){
+    public UserModel() {
         role = "developer";
     }
 
@@ -71,17 +73,27 @@ public class UserModel implements MyModel {
     public List<TaskModel> getTasks() {
         return tasks;
     }
-    public TaskModel getTask(int i)
-    {
+
+    public TaskModel getTask(int i) {
         return tasks.get(i);
     }
+
     public void setTasks(List<TaskModel> tasks) {
         this.tasks = tasks;
     }
-    public void assignTask(TaskModel tm)
-    {
+
+    public void assignTask(TaskModel tm) {
         tasks.add(tm);
     }
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+
     @Override
     public String toString() {
         return this.name;

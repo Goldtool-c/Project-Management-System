@@ -2,34 +2,33 @@ package by.gladyshev.projectmanagementsystem.service;
 
 import by.gladyshev.projectmanagementsystem.DAO.ProjectDAO;
 import by.gladyshev.projectmanagementsystem.DAO.TaskDAO;
+import by.gladyshev.projectmanagementsystem.DAO.UserDAO;
 import by.gladyshev.projectmanagementsystem.model.ProjectModel;
 import by.gladyshev.projectmanagementsystem.model.TaskModel;
 import by.gladyshev.projectmanagementsystem.model.UserModel;
-import by.gladyshev.projectmanagementsystem.repository.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@Service
+@RequiredArgsConstructor
 public class TaskDeleteService {
-    public static int delete(int id, TaskDAO DAO, ProjectDAO projectDAO)
-    {
-        ProjectModel pm = null;
-        TaskModel task = null;
+    private final TaskDAO DAO;
+    private final ProjectDAO projectDAO;
+    private final UserDAO userDAO;
+    public int delete(int id) {
+        TaskModel task = (TaskModel) DAO.show(id);
+        ProjectModel pm = (ProjectModel) projectDAO.show(task.getPm().getId());
         UserModel um = null;
-        try {
-            task = (TaskModel) Search.search(new Criteria("id", id), TaskRepository.INSTANCE);
-            pm = (ProjectModel) Search.search(new Criteria("id", task.getPm().getId()), ProjectRepository.INSTANCE);
-            if(task.getResponsible()!=null) {
-                um = (UserModel) Search.search(new Criteria("id", task.getResponsible().getId()), UserRepository.INSTANCE);
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        if (task.getResponsible() != null) {
+            um = (UserModel) userDAO.show(task.getResponsible().getId());
         }
-        for (int i = 0; i < pm.getTasks().size() ; i++) {
-            if(pm.getTasks().get(i).getId()==id)
-            {
+        for (int i = 0; i < pm.getTasks().size(); i++) {
+            if (pm.getTasks().get(i).getId() == id) {
                 pm.getTasks().remove(i);
                 break;
             }
         }
-        if(um!=null) {
+        if (um != null) {
             for (int i = 0; i < um.getTasks().size(); i++) {
                 if (um.getTask(i).getId() == id) {
                     um.getTasks().remove(i);
@@ -38,14 +37,15 @@ public class TaskDeleteService {
             }
         }
         projectDAO.update(pm);
-        for (int i = 0; i < TaskRepository.INSTANCE.Size(); i++) {
-            if(TaskRepository.INSTANCE.get(i).getId()==id)
-            {
-                TaskRepository.INSTANCE.delete(i);
-                break;
+        for (int i = 0; i <= DAO.getID(); i++) {
+            if(DAO.show(i)!=null) {
+                if (DAO.show(i).getId() == id) {
+                    DAO.delete(i);
+                    break;
+                }
             }
         }
-        DAO.delete(id);
+        //DAO.delete(id);
         return pm.getId();
     }
 }

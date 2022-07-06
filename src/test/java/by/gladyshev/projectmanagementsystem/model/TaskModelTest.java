@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TaskModelTest {
     private ProjectModel pm = Mockito.mock(ProjectModel.class);
+
     @Test
     void getShortName() {
         TaskModel tm = new TaskModel();

@@ -4,9 +4,11 @@ import by.gladyshev.projectmanagementsystem.model.UserModel;
 
 public class ActiveUser {
     private static UserModel activeUser = new UserModel();
+
     static {
         activeUser.setRole("developer");
     }
+
     private ActiveUser() {
     }
 

@@ -12,7 +12,7 @@ Project name
 Assigned developer:
 <a th:if="${task.getResponsible()==null}">There aren't any developers assigned on this task</a>
 <a th:if="${task.getResponsible()!=null}" th:text="${task.getResponsible().getName()}"
-th:href="@{/users/{id}(id=${task.getResponsible().getId()})}">value</a>
+   th:href="@{/users/{id}(id=${task.getResponsible().getId()})}">value</a>
 <br>
 Task name
 <br>

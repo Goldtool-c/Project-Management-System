@@ -10,7 +10,9 @@
     <a th:href="@{/users/{id}(id=${activeUser.getId()})}" th:text="${activeUser.getName()}">VALUE</a>
     <a href="/projects">All projects</a>
 </div>
-<div align="center">_______________________________________________________________________________________________________________________________________</div>
+<div align="center">
+    _______________________________________________________________________________________________________________________________________
+</div>
 <br>
 <div th:text="${'id: '+projectModel.getId()}">VALUE</div>
 <div th:text="${'NAME: '+projectModel.getName()}">VALUE</div>

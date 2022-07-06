@@ -20,19 +20,17 @@ import javax.sql.DataSource;
 @Configuration
 @ComponentScan("by.gladyshev.projectmanagementsystem")
 @EnableWebMvc
-public class
-SpringConfig implements WebMvcConfigurer {
+public class SpringConfig implements WebMvcConfigurer {
     private final ApplicationContext context;
+
     @Autowired
-    public SpringConfig(ApplicationContext context)
-    {
+    public SpringConfig(ApplicationContext context) {
         this.context = context;
     }
 
     @Bean
-    public DataSource dataSource()
-    {
-        DriverManagerDataSource dmds= new DriverManagerDataSource();
+    public DataSource dataSource() {
+        DriverManagerDataSource dmds = new DriverManagerDataSource();
         dmds.setDriverClassName("org.postgresql.Driver");
         dmds.setUrl("jdbc:postgresql://localhost:5432/ProjectManagementSystem");
         dmds.setUsername("postgres");
@@ -40,9 +38,9 @@ SpringConfig implements WebMvcConfigurer {
 
         return dmds;
     }
+
     @Bean
-    public JdbcTemplate jdbcTemplate()
-    {
+    public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());
     }
 }

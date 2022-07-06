@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/error")
-public class ErrorController{
+public class ErrorController {
     @GetMapping("/notEnoughRights")
-    public String accessError(Model model)
-    {
+    public String accessError(Model model) {
         model.addAttribute("activeUser", ActiveUser.getActiveUser());
         return "error/notEnoughRights";
     }

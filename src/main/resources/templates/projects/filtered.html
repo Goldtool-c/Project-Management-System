@@ -10,15 +10,22 @@
     <a th:href="@{/users/{id}(id=${activeUser.getId()})}" th:text="${activeUser.getName()}">VALUE</a>
     <a href="/projects">All projects</a>
 </div>
-<div align="center">_______________________________________________________________________________________________________________________________________</div>
+<div align="center">
+    _______________________________________________________________________________________________________________________________________
+</div>
 <br>
 <table border="1" width="600">
-    <tr><th>Project name</th> <th>Developers</th></tr>
+    <tr>
+        <th>Project name</th>
+        <th>Developers</th>
+    </tr>
     <div th:each="projectModel:${projects}">
-        <tr><td><a th:href="@{/projects/{id}
+        <tr>
+            <td><a th:href="@{/projects/{id}
             (id=${projectModel.getId()})}" th:text="${projectModel.getName()}">VALUE</a></td>
             <td><a th:href="@{/projects/{id}
-        (id=${projectModel.getId()})}" th:text="${projectModel.getDevelopers()}">VALUE</a></td></tr>
+        (id=${projectModel.getId()})}" th:text="${projectModel.getDevelopers()}">VALUE</a></td>
+        </tr>
     </div>
 </table>
 Page:

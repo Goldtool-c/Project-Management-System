@@ -8,17 +8,19 @@ import java.util.List;
 
 public class ShowAccessValidator {
     private static ShowAccessValidator instance;
-    private ShowAccessValidator(){}
+
+    private ShowAccessValidator() {
+    }
+
     public static ShowAccessValidator getInstance() {
-        if(instance == null){
+        if (instance == null) {
             instance = new ShowAccessValidator();
         }
         return instance;
     }
-    public boolean showValid(ProjectModel pm)
-    {
-        if(ActiveUser.getActiveUser().getRole().equals("admin"))
-        {
+
+    public boolean showValid(ProjectModel pm) {
+        if (ActiveUser.getActiveUser().getRole().equals("admin")) {
             return true;
         }
         List<UserModel> users = pm.getDevelopers();
@@ -29,9 +31,9 @@ public class ShowAccessValidator {
         }
         return false;
     }
-    public boolean showValid(UserModel userModel)
-    {
+
+    public boolean showValid(UserModel userModel) {
         return userModel.equals(ActiveUser.getActiveUser())
-                ||ActiveUser.getActiveUser().getRole().equals("admin");
+                || ActiveUser.getActiveUser().getRole().equals("admin");
     }
 }

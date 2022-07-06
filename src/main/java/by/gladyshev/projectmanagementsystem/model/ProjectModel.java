@@ -1,10 +1,5 @@
 package by.gladyshev.projectmanagementsystem.model;
 
-import by.gladyshev.projectmanagementsystem.repository.Criteria;
-import by.gladyshev.projectmanagementsystem.repository.Search;
-import by.gladyshev.projectmanagementsystem.repository.TaskRepository;
-import by.gladyshev.projectmanagementsystem.repository.UserRepository;
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -18,7 +13,7 @@ public class ProjectModel implements MyModel {
     private String name;
     private List<UserModel> developers = new ArrayList<>();
     private List<TaskModel> tasks = new ArrayList<>();
-
+    private boolean flag;
 
     public ProjectModel(int id, String name) {
         this.id = id;
@@ -30,6 +25,7 @@ public class ProjectModel implements MyModel {
         this.name = name;
         this.developers = developers;
     }
+
     public ProjectModel() {
 
     }
@@ -60,6 +56,11 @@ public class ProjectModel implements MyModel {
         this.developers = developers;
     }
 
+    public void reassignTasks(List<TaskModel> tms)
+    {
+        this.tasks=tms;
+    }
+
     @Override
     public String toString() {
         return "ProjectModel{" +
@@ -68,37 +69,20 @@ public class ProjectModel implements MyModel {
                 '}';
     }
 
-    public void assignDeveloper(String name) throws IllegalAccessException {
-        if(name!=null) {
-            UserModel dev = (UserModel) Search.search(new Criteria("name", name), UserRepository.INSTANCE);
-            if(duplicateValid(dev)) {developers.add(dev);}
-            // else todo exception
-        }//todo exception
-    }
-    public void addTask(TaskModel task)
-    {
+    public void addTask(TaskModel task) {
         tasks.add(task);
     }
-    public void addTask(String task)
-    {
-        TaskModel tm = null;
-        try {
-            tm = (TaskModel) Search.search(new Criteria("name", task), TaskRepository.INSTANCE);
-            tasks.add(tm);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+
+    //public void setTasks()
+    public void assignDeveloper(UserModel um) {
+        if (duplicateValid(um)) {
+            developers.add(um);
         }
     }
-    //public void setTasks()
-    public void assignDeveloper(UserModel um)
-    {
-        if(duplicateValid(um)) {developers.add(um);}
-    }
-    private boolean duplicateValid(UserModel um)
-    {
+
+    private boolean duplicateValid(UserModel um) {
         for (int i = 0; i < developers.size(); i++) {
-            if(developers.get(i).equals(um))
-            {
+            if (developers.get(i).equals(um)) {
                 return false;
             }
         }
@@ -108,7 +92,7 @@ public class ProjectModel implements MyModel {
     public String[] getUserNames()//get dev names
     {
         String[] names = new String[developers.size()];
-        for (int i = 0; i < names.length ; i++) {
+        for (int i = 0; i < names.length; i++) {
             names[i] = developers.get(i).getName();
         }
         return names;
@@ -117,19 +101,18 @@ public class ProjectModel implements MyModel {
     public String[] getTaskNames()//get dev names
     {
         String[] names = new String[tasks.size()];
-        for (int i = 0; i < names.length ; i++) {
+        for (int i = 0; i < names.length; i++) {
             names[i] = tasks.get(i).getName();
         }
         return names;
     }
+
     public List<TaskModel> getTasks() {
         return tasks;
     }
 
-    private void setTasksNames()
-    {
-        if(tasks.size()!=0)
-        {
+    private void setTasksNames() {
+        if (tasks.size() != 0) {
             TaskModel temp;
             for (int i = 0; i < tasks.size(); i++) {
                 temp = tasks.get(i);
@@ -138,9 +121,11 @@ public class ProjectModel implements MyModel {
             }
         }
     }
+
     public void setTasks(List<TaskModel> tasks) {
         this.tasks = tasks;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -155,4 +140,11 @@ public class ProjectModel implements MyModel {
         return Objects.hash(id, name);
     }
 
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
 }

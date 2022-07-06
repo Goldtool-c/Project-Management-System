@@ -1,6 +1,6 @@
 package by.gladyshev.projectmanagementsystem.util;
 
-import by.gladyshev.projectmanagementsystem.model.MyModel;
+/*import by.gladyshev.projectmanagementsystem.model.MyModel;
 import by.gladyshev.projectmanagementsystem.model.ProjectModel;
 import by.gladyshev.projectmanagementsystem.model.UserModel;
 import by.gladyshev.projectmanagementsystem.repository.Criteria;
@@ -11,13 +11,17 @@ import by.gladyshev.projectmanagementsystem.repository.UserRepository;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.List;*/
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 public class ProjectFilter {
     @NotEmpty(message = "it should not be empty")
     @Size(min = 1, message = "it should not be empty")
     private String userName;
     private String projectName;
+
     public ProjectFilter() {
     }
 
@@ -37,11 +41,9 @@ public class ProjectFilter {
         this.projectName = projectName;
     }
 
-    public static List<MyModel> filter(ProjectFilter filter)
-    {
+    /*public static List<MyModel> filter(ProjectFilter filter) {
         List<MyModel> res = new ArrayList<>();
-        if(filter.getUserName().length()==0)
-        {
+        if (filter.getUserName().length() == 0) {
             res = ProjectRepository.INSTANCE.getAll();
         }
         ProjectModel tempPM;
@@ -51,7 +53,7 @@ public class ProjectFilter {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        if(goal!=null) {
+        if (goal != null) {
             for (int i = 0; i < ProjectRepository.INSTANCE.Size(); i++) {
                 tempPM = (ProjectModel) ProjectRepository.INSTANCE.get(i);
                 for (int j = 0; j < tempPM.getDevelopers().size(); j++) {
@@ -66,8 +68,8 @@ public class ProjectFilter {
         res = projectNameFilter(res, filter);
         return res;
     }
-    private static List<MyModel> projectNameFilter(List<MyModel> toFilter, ProjectFilter filter)
-    {
+
+    private static List<MyModel> projectNameFilter(List<MyModel> toFilter, ProjectFilter filter) {
         List<MyModel> res = new ArrayList<>();
         ProjectModel temp;
         for (MyModel myModel : toFilter) {
@@ -77,7 +79,7 @@ public class ProjectFilter {
             }
         }
         return res;
-    }
+    }*/
 
     @Override
     public String toString() {
